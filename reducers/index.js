@@ -1,10 +1,10 @@
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
 
-export const TOGGLE_THEME = 'TOGGLE_THEME';
-export const toggleTheme = theme => ({
+export const TOGGLE_THEME = 'TOGGLE_THEME'
+export const toggleTheme = (theme) => ({
   type: TOGGLE_THEME,
-  payload: theme,
-});
+  payload: theme
+})
 
 const INITIAL_STATE = {
   darkModeEnabled: false
@@ -12,21 +12,21 @@ const INITIAL_STATE = {
 
 const Settings = (state = INITIAL_STATE, action) => {
   console.debug(action.type)
-  console.debug("payload: ", action.payload)
+  console.debug('payload: ', action.payload)
 
   switch (action.type) {
-     case 'TOGGLE_THEME':
-      switch(action.payload) {
+    case 'TOGGLE_THEME':
+      switch (action.payload) {
         case true:
           return { darkModeEnabled: true }
         case false:
           return { darkModeEnabled: false }
       }
     default:
-     return false
+      return false
   }
 }
 
 export default combineReducers({
-  Settings,
-});
+  Settings
+})

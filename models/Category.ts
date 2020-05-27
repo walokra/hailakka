@@ -1,4 +1,3 @@
-
 // https://fi.high.fi/api/?act=listCategories&usedLanguage=finnish
 // {
 //   "responseData": {
@@ -31,10 +30,10 @@
 // }
 // }
 export type Category = {
-  title: String
-  sectionID: Number
-  depth: Number
-  htmlFilename: String
-  highlight: Boolean
-  selected: Boolean
+  title: string
+  sectionID: number
+  depth: number
+  htmlFilename: string
+  highlight: boolean
+  selected: boolean
 }

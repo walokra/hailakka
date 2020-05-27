@@ -19,7 +19,7 @@ interface Props {
   isError: boolean
 }
 
-const Homescreen: React.FC<Props> = (navigation) => {
+const Homescreen: React.FC<Props> = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading ] = useState(true);
   const [error, setError ] = useState(false);

@@ -3,7 +3,7 @@ import { Provider, useSelector } from 'react-redux';
 import { StatusBar, StyleSheet, View, SafeAreaView, Text, ActivityIndicator, Dimensions } from 'react-native';
 import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 
 import useCachedResources from './hooks/useCachedResources';
@@ -15,6 +15,7 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
 import store from './store';
+import { Category } from './models/Category';
 
 // function SettingsScreen({ route, navigation }) {
 //   const { user } = route.params;
@@ -30,29 +31,20 @@ import store from './store';
 //   );
 // }
 
-// function HomeScreen({ navigation }) {
-//   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Text>Home Screen</Text>
-//       <Button
-//         title="Go to Settings"
-//         onPress={() =>
-//           navigation.navigate('Foo', {
-//             screen: 'Settings',
-//             params: { user: 'jane' },
-//           })
-//         }
-//       />
-//     </View>
-//   );
-// }
-
-function CustomDrawerContent(props, {darkModeEnabled, setDarkModeEnabled}) {
+function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      <Header />
+      <Header {...props} />
 
-      <DrawerItemList {...props} />
+      <DrawerItemList
+        {...props}
+        onItemPress = {
+          ( route, focused ) => {
+            props.onItemPress({ route, focused })
+            console.log("item pressed");
+          }
+        }
+      />
     </DrawerContentScrollView>
   );
 }
@@ -72,7 +64,6 @@ function Root() {
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  const { colors } = useTheme();
 
   const dimensions = Dimensions.get('window');
   const isLargeScreen = dimensions.width >= 768;
@@ -127,17 +118,16 @@ function App() {
         <StatusBar barStyle={themeStatusBarStyle} />
         <NavigationContainer theme={(colorScheme === 'dark' || darkModeEnabled) ? DarkTheme : DefaultTheme}>
           <Drawer.Navigator
-            openByDefault
             drawerType={isLargeScreen ? 'permanent' : 'back'}
             drawerStyle={isLargeScreen ? null : { width: '100%' }}
             overlayColor="transparent"
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             initialRouteName="Root"
           >
-            {categories.map((item, index) =>
+            {categories.map((item: Category, index) =>
               <Drawer.Screen
-                key={index}
-                name={item.title + "_" + index}
+                key={item.sectionID}
+                name={item.title + "_" + item.sectionID}
                 component={Root}
                 options={{ drawerLabel: item.title }}
               />

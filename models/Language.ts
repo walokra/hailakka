@@ -1,4 +1,3 @@
-
 // listLanguages
 // https://fi.high.fi/api/?act=listLanguages&APIKEY=123
 // {
@@ -28,13 +27,12 @@
 // }
 // }
 export type Language = {
-  language: String,
-  country: String,
-  domainToUse: String,
-  languageCode: String,
-  mostPopularName: String,
-  latestName: String,
-  useToRetrieveLists: String,
-  genericNewsURLPart: String
-};
-
+  language: string
+  country: string
+  domainToUse: string
+  languageCode: string
+  mostPopularName: string
+  latestName: string
+  useToRetrieveLists: string
+  genericNewsURLPart: string
+}
