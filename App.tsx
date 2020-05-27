@@ -1,126 +1,89 @@
-import { NavigationContainer, DefaultTheme, DarkTheme, useNavigation } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
 import React, { useState, useEffect } from 'react';
+import { Provider, useSelector } from 'react-redux';
 import { StatusBar, StyleSheet, View, SafeAreaView, Text, ActivityIndicator, Dimensions } from 'react-native';
-
+import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 
 import useCachedResources from './hooks/useCachedResources';
-// import BottomTabNavigator from './navigation/BottomTabNavigator';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
-
-import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
-import Switch from 'expo-dark-mode-switch';
-import { useTheme } from '@react-navigation/native';
-
 import {listLanguages, listCategories} from './controllers/api';
 
-// const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+import Header from './components/Header';
 
-// <DrawerItem
-// label="Uutiset"
-// onPress={() => Linking.openURL('https://mywebsite.com/help')}
-// />
-function CustomDrawerContent(props) {
+import HomeScreen from './screens/HomeScreen';
+import SettingsScreen from './screens/SettingsScreen';
+
+import store from './store';
+
+// function SettingsScreen({ route, navigation }) {
+//   const { user } = route.params;
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Settings Screen</Text>
+//       <Text>userParam: {JSON.stringify(user)}</Text>
+//       <Button
+//         title="Go to Profile"
+//         onPress={() => navigation.navigate('Profile')}
+//       />
+//     </View>
+//   );
+// }
+
+// function HomeScreen({ navigation }) {
+//   return (
+//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+//       <Text>Home Screen</Text>
+//       <Button
+//         title="Go to Settings"
+//         onPress={() =>
+//           navigation.navigate('Foo', {
+//             screen: 'Settings',
+//             params: { user: 'jane' },
+//           })
+//         }
+//       />
+//     </View>
+//   );
+// }
+
+function CustomDrawerContent(props, {darkModeEnabled, setDarkModeEnabled}) {
   return (
     <DrawerContentScrollView {...props}>
-      <HeaderComponent
-          isDarkModeEnabled={props.isDarkModeEnabled}
-          setIsDarkModeEnabled={props.setIsDarkModeEnabled}
-      />
+      <Header />
 
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
 }
 
-function SidebarDrawer(props) {
-  const dimensions = Dimensions.get('window');
-  const isLargeScreen = dimensions.width >= 768;
+const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
-  let isDarkModeEnabled=props.isDarkModeEnabled
-  let setIsDarkModeEnabled=props.setIsDarkModeEnabled
-
-  // <Drawer.Screen name="Articles" component={HomeScreen} />
-  // <Drawer.Screen name="Settings" component={SettingsScreen} />
-
+function Root() {
   return (
-    <Drawer.Navigator
-      openByDefault
-      drawerType={isLargeScreen ? 'permanent' : 'back'}
-      drawerStyle={isLargeScreen ? null : { width: '100%' }}
-      overlayColor="transparent"
-      drawerContent={(props) => <CustomDrawerContent {...props} navigation={props.navigation} isDarkModeEnabled={isDarkModeEnabled} setIsDarkModeEnabled={setIsDarkModeEnabled} />}
-      initialRouteName="Uutiset"
-    >
-      {props.categories.map((item, index) =>
-        <Drawer.Screen
-          key={index}
-          name={item.title + "_" + index}
-          component={HomeScreen}
-          options={{ drawerLabel: item.title }}
-
-        />
-      )}
-    </Drawer.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen name="Highlakka" component={HomeScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} />
+    </Stack.Navigator>
   );
-}
-
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
-
-export default function AppContainer() {
-  return (
-    <AppearanceProvider>
-      <App />
-    </AppearanceProvider>
-  );
-}
-
-function HeaderComponent(props) {
-  const { colors } = useTheme();
-
-  return (
-    <View style={styles.switchContainerStyle}>
-      <View style={styles.titleWrapper}>
-        <Text style={[styles.switchTitleStyle, {color: colors.text}]}>Highlakka</Text>
-      </View>
-      <View style={styles.switchWrapperStyle}>
-        <Switch value={props.isDarkModeEnabled} onChange={value => {
-          props.setIsDarkModeEnabled(value)}
-        } />
-      </View>
-    </View>
-  )
 }
 
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(colorScheme == 'light' ? false : true);
+  const { colors } = useTheme();
 
-  const themeStatusBarStyle =
-    (colorScheme === 'light' && !isDarkModeEnabled) ? 'dark-content' : 'light-content';
+  const dimensions = Dimensions.get('window');
+  const isLargeScreen = dimensions.width >= 768;
 
-    // <Stack.Navigator
-    //   screenOptions={{
-    //     gestureEnabled: true,
-    //     headerStyle: [styles.header],
-    //     headerBackTitleVisible: false
-    //   }}>
-    //   <Stack.Screen name="Root" component={BottomTabNavigator}
-    //     options={{
-    //       headerTitle: props => <HeaderComponent
-    //         isDarkModeEnabled={isDarkModeEnabled} setIsDarkModeEnabled={setIsDarkModeEnabled}
-    //       />
-    //     }}
-    //   />
-    // </Stack.Navigator>
-
+  const darkModeEnabled = useSelector(state => state.Settings.darkModeEnabled);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading ] = useState(true);
   const [error, setError ] = useState(false);
+
+  const themeStatusBarStyle =
+    (colorScheme == 'light' && !darkModeEnabled) ? 'dark-content': 'light-content';
 
   useEffect(()=>{
     // const languages = listLanguages("high.fi")
@@ -141,38 +104,60 @@ function App() {
   if (!isLoadingComplete) {
     return null;
   } else {
-    console.log(colorScheme)
-    // if (loading) {
-    //   return (
-    //     <SafeAreaView style={[styles.container]}>
-    //       <ActivityIndicator animating={true} />
-    //     </SafeAreaView>
-    //   )
-    // }
+    if (loading) {
+      return (
+        <SafeAreaView style={[styles.container]}>
+          <ActivityIndicator animating={true} />
+        </SafeAreaView>
+      )
+    }
 
-    // if (error) {
-    //   return (
-    //     <SafeAreaView style={[styles.container]}>
-    //       <Text>
-    //         Failed to load news!
-    //       </Text>
-    //     </SafeAreaView>
-    //   )
-    // }
+    if (error) {
+      return (
+        <SafeAreaView style={[styles.container]}>
+          <Text>
+            Failed to load news!
+          </Text>
+        </SafeAreaView>
+      )
+    }
 
     return (
-      <SafeAreaView style={[styles.container]}>
+      <View style={[styles.container]}>
         <StatusBar barStyle={themeStatusBarStyle} />
-        <NavigationContainer linking={LinkingConfiguration} theme={(colorScheme === 'dark' && isDarkModeEnabled) ? DarkTheme : DefaultTheme}>
-          <SidebarDrawer
-            isDarkModeEnabled={isDarkModeEnabled}
-            setIsDarkModeEnabled={setIsDarkModeEnabled}
-            categories={categories}
-          />
+        <NavigationContainer theme={(colorScheme === 'dark' || darkModeEnabled) ? DarkTheme : DefaultTheme}>
+          <Drawer.Navigator
+            openByDefault
+            drawerType={isLargeScreen ? 'permanent' : 'back'}
+            drawerStyle={isLargeScreen ? null : { width: '100%' }}
+            overlayColor="transparent"
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            initialRouteName="Root"
+          >
+            {categories.map((item, index) =>
+              <Drawer.Screen
+                key={index}
+                name={item.title + "_" + index}
+                component={Root}
+                options={{ drawerLabel: item.title }}
+              />
+            )}
+          </Drawer.Navigator>
         </NavigationContainer>
-      </SafeAreaView>
+      </View>
     );
   }
+
+}
+
+export default function AppContainer() {
+  return (
+      <AppearanceProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </AppearanceProvider>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -183,25 +168,4 @@ const styles = StyleSheet.create({
   header: {
     height: 50
   },
-  switchContainerStyle: {
-    padding: 0,
-    minHeight: 50,
-    alignItems: 'center',
-    flexDirection: 'row',
-
-  },
-  switchTitleStyle: {
-    flex: 0,
-    paddingLeft: 0,
-    paddingRight: 8,
-    fontSize: 16,
-    fontWeight: "bold"
-  },
-  switchWrapperStyle: {
-    flex: 0,
-    flexDirection: 'row',
-    paddingLeft: 8,
-    marginRight: 64,
-  },
-  titleWrapper: { flex: 1, position: 'relative' },
 });

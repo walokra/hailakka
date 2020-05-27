@@ -6,7 +6,7 @@ import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import SettingsSwitch from '../components/Switch';
 import { useTheme } from '@react-navigation/native';
 
-export default function SettingsScreen() {
+export default function SettingsScreen({ route, navigation }) {
   const [isMobileModeEnabled, setIsMobileModeEnabled] = useState(false);
   const { colors } = useTheme();
 
