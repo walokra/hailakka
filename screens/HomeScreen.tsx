@@ -10,27 +10,23 @@ import {
 import * as WebBrowser from 'expo-web-browser';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
-
-// TEMPORARY: hard coded, fetch only news
-// http://en.high.fi/api/help
-const apiEndpoint =
-  Platform.OS === 'web'
-    ? 'https://cors-anywhere.herokuapp.com/https://fi.high.fi/uutiset/json-private?APIKEY=1234567890'
-    : 'https://fi.high.fi/uutiset/json-private?APIKEY=1234567890';
+import { createApiEndpoint } from '../config/api';
 
 const init: RequestInit = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
+    'User-Agent': 'Highlakka',
   },
 };
 
 interface Props {
   isLoading: boolean;
   isError: boolean;
+  category: string;
 }
 
-const Homescreen: React.FC<Props> = () => {
+const Homescreen: React.FC<Props> = ({ category = 'uutiset' }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -38,7 +34,7 @@ const Homescreen: React.FC<Props> = () => {
   const { colors } = useTheme();
 
   useEffect(() => {
-    const apiRequest = new Request(apiEndpoint, init);
+    const apiRequest = new Request(createApiEndpoint(category), init);
     fetch(apiRequest)
       .then((response) => {
         const resp = response.json();

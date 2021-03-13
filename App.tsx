@@ -43,7 +43,7 @@ function CustomDrawerContent(props) {
         {...props}
         onItemPress={(route, focused) => {
           props.onItemPress({ route, focused });
-          console.log('item pressed');
+          console.log(`item pressed: ${route}`);
         }}
       />
     </DrawerContentScrollView>
@@ -80,7 +80,6 @@ function App() {
   const darkModeEnabled = useSelector(
     (state) => state.Settings.darkModeEnabled,
   );
-  console.log({ darkModeEnabled });
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
