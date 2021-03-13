@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import {
-  Platform,
   StatusBar,
   StyleSheet,
   View,
@@ -33,11 +32,7 @@ import SettingsScreen from './screens/SettingsScreen';
 
 import store from './store';
 import { Category } from './models/Category';
-
-const domainToUse =
-  Platform.OS === 'web'
-    ? 'cors-anywhere.herokuapp.com/https://high.fi/'
-    : 'high.fi';
+import { domainToUse } from './config/api';
 
 function CustomDrawerContent(props) {
   return (
@@ -141,7 +136,9 @@ function App() {
         <StatusBar barStyle={themeStatusBarStyle} />
         <NavigationContainer
           theme={
-            colorScheme === 'light' || darkModeEnabled ? DarkTheme : DefaultTheme
+            colorScheme === 'light' || darkModeEnabled
+              ? DarkTheme
+              : DefaultTheme
           }
         >
           <Drawer.Navigator
