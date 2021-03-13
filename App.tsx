@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { Provider, useSelector } from 'react-redux';
-import { StatusBar, StyleSheet, View, SafeAreaView, Text, ActivityIndicator, Dimensions } from 'react-native';
-import { NavigationContainer, DefaultTheme, DarkTheme, useTheme } from '@react-navigation/native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from '@react-navigation/drawer';
 import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
 
 import useCachedResources from './hooks/useCachedResources';
-import {listLanguages, listCategories} from './controllers/api';
+import { listCategories } from './controllers/api';
 
 import Header from './components/Header';
 
@@ -17,19 +34,10 @@ import SettingsScreen from './screens/SettingsScreen';
 import store from './store';
 import { Category } from './models/Category';
 
-// function SettingsScreen({ route, navigation }) {
-//   const { user } = route.params;
-//   return (
-//     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-//       <Text>Settings Screen</Text>
-//       <Text>userParam: {JSON.stringify(user)}</Text>
-//       <Button
-//         title="Go to Profile"
-//         onPress={() => navigation.navigate('Profile')}
-//       />
-//     </View>
-//   );
-// }
+const domainToUse =
+  Platform.OS === 'web'
+    ? 'cors-anywhere.herokuapp.com/https://high.fi/'
+    : 'high.fi';
 
 function CustomDrawerContent(props) {
   return (
@@ -38,12 +46,10 @@ function CustomDrawerContent(props) {
 
       <DrawerItemList
         {...props}
-        onItemPress = {
-          ( route, focused ) => {
-            props.onItemPress({ route, focused })
-            console.log("item pressed");
-          }
-        }
+        onItemPress={(route, focused) => {
+          props.onItemPress({ route, focused });
+          console.log('item pressed');
+        }}
       />
     </DrawerContentScrollView>
   );
@@ -61,6 +67,14 @@ function Root() {
   );
 }
 
+function EmptyScreen() {
+  return (
+    <View
+      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+    ></View>
+  );
+}
+
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
@@ -68,28 +82,39 @@ function App() {
   const dimensions = Dimensions.get('window');
   const isLargeScreen = dimensions.width >= 768;
 
-  const darkModeEnabled = useSelector(state => state.Settings.darkModeEnabled);
+  const darkModeEnabled = useSelector(
+    (state) => state.Settings.darkModeEnabled,
+  );
+  console.log({ darkModeEnabled });
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading ] = useState(true);
-  const [error, setError ] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const themeStatusBarStyle =
-    (colorScheme == 'light' && !darkModeEnabled) ? 'dark-content': 'light-content';
+    colorScheme == 'light' && !darkModeEnabled
+      ? 'dark-content'
+      : 'light-content';
 
-  useEffect(()=>{
+  useEffect(() => {
     // const languages = listLanguages("high.fi")
-    listCategories("high.fi", "Suosituimmat", "uutiset", "Uusimmat", "finnish")
-    .then((categories) => {
-      setCategories(categories);
-      setLoading(false);
-      setError(false);
-    })
-    .catch((error) => {
-      console.error(error);
-      setLoading(false);
-      setError(true);
-    })
-    .finally(() => setLoading(false))
+    listCategories(
+      domainToUse,
+      'Suosituimmat',
+      'uutiset',
+      'Uusimmat',
+      'finnish',
+    )
+      .then((categories) => {
+        setCategories(categories);
+        setLoading(false);
+        setError(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+        setError(true);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   if (!isLoadingComplete) {
@@ -100,23 +125,25 @@ function App() {
         <SafeAreaView style={[styles.container]}>
           <ActivityIndicator animating={true} />
         </SafeAreaView>
-      )
+      );
     }
 
     if (error) {
       return (
         <SafeAreaView style={[styles.container]}>
-          <Text>
-            Failed to load news!
-          </Text>
+          <Text>Failed to load news!</Text>
         </SafeAreaView>
-      )
+      );
     }
 
     return (
       <View style={[styles.container]}>
         <StatusBar barStyle={themeStatusBarStyle} />
-        <NavigationContainer theme={(colorScheme === 'dark' || darkModeEnabled) ? DarkTheme : DefaultTheme}>
+        <NavigationContainer
+          theme={
+            colorScheme === 'light' || darkModeEnabled ? DarkTheme : DefaultTheme
+          }
+        >
           <Drawer.Navigator
             drawerType={isLargeScreen ? 'permanent' : 'back'}
             drawerStyle={isLargeScreen ? null : { width: '100%' }}
@@ -124,29 +151,32 @@ function App() {
             drawerContent={(props) => <CustomDrawerContent {...props} />}
             initialRouteName="Root"
           >
-            {categories.map((item: Category, index) =>
-              <Drawer.Screen
-                key={item.sectionID}
-                name={item.title + "_" + item.sectionID}
-                component={Root}
-                options={{ drawerLabel: item.title }}
-              />
+            {categories && categories.length > 0 ? (
+              categories.map((item: Category, index) => (
+                <Drawer.Screen
+                  key={item.sectionID}
+                  name={item.title + '_' + item.sectionID}
+                  component={Root}
+                  options={{ drawerLabel: item.title }}
+                />
+              ))
+            ) : (
+              <Drawer.Screen name="empty" component={EmptyScreen} />
             )}
           </Drawer.Navigator>
         </NavigationContainer>
       </View>
     );
   }
-
 }
 
 export default function AppContainer() {
   return (
-      <AppearanceProvider>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </AppearanceProvider>
+    <AppearanceProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </AppearanceProvider>
   );
 }
 
@@ -156,6 +186,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    height: 50
+    height: 50,
   },
 });

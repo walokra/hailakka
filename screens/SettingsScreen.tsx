@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import SettingsSwitch from '../components/Switch';
@@ -11,33 +11,41 @@ export default function SettingsScreen({ route, navigation }) {
   const { colors } = useTheme();
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.card }]} contentContainerStyle={[styles.contentContainer]}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.card }]}
+      contentContainerStyle={[styles.contentContainer]}
+    >
       <View key="application">
-          <Text style={[styles.titleStyle, { color: colors.text }]}>Information</Text>
-          <View>
-            <OptionButton
-              icon="md-compass"
-              label="Highlakka on GitHub"
-              onPress={() => WebBrowser.openBrowserAsync('https://github.com/walokra/highlakka')}
-              isLastOption
-            />
-          </View>
+        <Text style={[styles.titleStyle, { color: colors.text }]}>
+          Information
+        </Text>
+        <View>
+          <OptionButton
+            icon="md-compass"
+            label="Highlakka on GitHub"
+            onPress={() =>
+              WebBrowser.openBrowserAsync(
+                'https://github.com/walokra/highlakka',
+              )
+            }
+            isLastOption
+          />
+        </View>
       </View>
 
       <View>
         <Text style={[styles.titleStyle, { color: colors.text }]}>General</Text>
         <SettingsSwitch
-          title={"Use mobile mode"}
+          title={'Use mobile mode'}
           containerStyle={{ backgroundColor: colors.card }}
           titleStyle={{ color: colors.text }}
-          onValueChange={value => {
-            console.log("use mobile mode:", value);
-            setIsMobileModeEnabled(value)
+          onValueChange={(value) => {
+            console.log('use mobile mode:', value);
+            setIsMobileModeEnabled(value);
           }}
           value={isMobileModeEnabled}
         />
       </View>
-
     </ScrollView>
   );
 }
@@ -46,13 +54,22 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
   const { colors } = useTheme();
 
   return (
-    <RectButton style={[styles.option, isLastOption && styles.lastOption, { backgroundColor: colors.card }]} onPress={onPress}>
+    <RectButton
+      style={[
+        styles.option,
+        isLastOption && styles.lastOption,
+        { backgroundColor: colors.card },
+      ]}
+      onPress={onPress}
+    >
       <View style={{ flexDirection: 'row' }}>
         <View style={styles.optionIconContainer}>
           <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
         </View>
         <View>
-          <Text style={[styles.optionText, { color: colors.text }]}>{label}</Text>
+          <Text style={[styles.optionText, { color: colors.text }]}>
+            {label}
+          </Text>
         </View>
       </View>
     </RectButton>
@@ -89,8 +106,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     borderColor: '#ededed',
   },
-  lastOption: {
-  },
+  lastOption: {},
   optionText: {
     fontSize: 15,
     alignSelf: 'flex-start',

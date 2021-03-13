@@ -1,18 +1,18 @@
-import { Language } from '../models/Language'
-import { Category } from '../models/Category'
+// import { Language } from '../models/Language';
+import { Category } from '../models/Category';
 
-const HIGH_FI_API = 'json-private'
-const API_KEY = '1234567890'
-const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)'
-const domainToUse = 'high.fi'
+// const HIGH_FI_API = 'json-private';
+const API_KEY = '1234567890';
+const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
+// const domainToUse = 'high.fi';
 
 const init: RequestInit = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
-    'User-Agent': USER_AGENT
-  }
-}
+    'User-Agent': USER_AGENT,
+  },
+};
 
 // export function load(source: Object, domainToUse: string, hideSections: [], onSuccess, onFailure) {
 //     var url = "http://" + domainToUse + "/" + source.htmlFilename + "/" + HIGH_FI_API + "?APIKEY=" + API_KEY;
@@ -80,13 +80,13 @@ const init: RequestInit = {
 // http://high.fi/api/?act=listLanguages&APIKEY=123456
 export const listLanguages = async (domainToUse: string) => {
   const url =
-    'https://' + domainToUse + '/api/?act=listLanguages&APIKEY=' + API_KEY
+    'https://' + domainToUse + '/api/?act=listLanguages&APIKEY=' + API_KEY;
   //console.debug("high.js, listLanguages, url=" + url);
 
-  const apiRequest = new Request(url, init)
+  const apiRequest = new Request(url, init);
   fetch(apiRequest)
     .then((response) => {
-      return response.json()
+      return response.json();
     })
     .then((data) => {
       // console.debug(data)
@@ -116,24 +116,24 @@ export const listLanguages = async (domainToUse: string) => {
       //       ]
       //   }
       // }
-      const items = data.responseData.supportedLanguages
+      const items = data.responseData.supportedLanguages;
 
-      const languages = []
+      const languages = [];
       items.forEach((entry) => {
-        const item = {}
+        const item = {};
         for (const key in entry) {
-          item[key] = entry[key]
+          item[key] = entry[key];
         }
-        languages.push(item)
-      })
+        languages.push(item);
+      });
 
-      return languages
+      return languages;
     })
     .catch((error: Error) => {
-      console.error(error)
-      throw Error('Fetching languages failed! ' + error.message)
-    })
-}
+      console.error(error);
+      throw Error('Fetching languages failed! ' + error.message);
+    });
+};
 
 /**
   Returns full list of news categories available for the selected language.
@@ -146,25 +146,25 @@ export const listCategories = async (
   mostPopularName: string,
   genericNewsURLPart: string,
   latestName: string,
-  useToRetrieveLists: string
+  useToRetrieveLists: string,
 ) => {
-  const categories = []
+  const categories = [];
   const popular = {
     title: mostPopularName,
     sectionID: 'top',
     htmlFilename: 'top',
     selected: true,
-    depth: 1
-  }
-  categories.push(popular)
+    depth: 1,
+  };
+  categories.push(popular);
   const latest = {
     title: latestName,
     sectionID: genericNewsURLPart,
     htmlFilename: genericNewsURLPart,
     selected: true,
-    depth: 1
-  }
-  categories.push(latest)
+    depth: 1,
+  };
+  categories.push(latest);
 
   const url =
     'https://' +
@@ -172,30 +172,30 @@ export const listCategories = async (
     '/api/?act=listCategories&usedLanguage=' +
     useToRetrieveLists +
     '&APIKEY=' +
-    API_KEY
+    API_KEY;
   // console.debug("api.ts, listLanguages, url=" + url);
 
-  const apiRequest = new Request(url, init)
+  const apiRequest = new Request(url, init);
 
   try {
-    const response = await fetch(apiRequest)
-    const data = await response.json()
+    const response = await fetch(apiRequest);
+    const data = await response.json();
 
-    const items = data.responseData.categories
+    const items = data.responseData.categories;
 
-    const categories = []
+    const categories = [];
     items.forEach((entry: Category) => {
-      const item = {}
+      const item = {};
       for (const key in entry) {
-        item[key] = entry[key]
+        item[key] = entry[key];
       }
-      item['selected'] = false
+      item['selected'] = false;
 
-      categories.push(item)
-    })
-    return categories
+      categories.push(item);
+    });
+    return categories;
   } catch (error) {
-    console.error(error)
-    throw Error('Fetching languages failed! ' + error.message)
+    console.error(error);
+    throw Error('Fetching languages failed! ' + error.message);
   }
-}
+};

@@ -80,18 +80,31 @@ class SettingsSwitch extends Component {
 
   render() {
     const {
-      containerProps, containerStyle, titleProps, titleStyle, title, disabled, switchProps,
-      disabledOverlayStyle, switchWrapperProps, switchWrapperStyle, value,
-      trackColor, onValueChange, descriptionProps, descriptionStyle, description,
+      containerProps,
+      containerStyle,
+      titleProps,
+      titleStyle,
+      title,
+      disabled,
+      switchProps,
+      disabledOverlayStyle,
+      switchWrapperProps,
+      switchWrapperStyle,
+      value,
+      trackColor,
+      onValueChange,
+      descriptionProps,
+      descriptionStyle,
+      description,
     } = this.props;
 
     return (
-      <View {...containerProps} style={[style.defaultContainerStyle, containerStyle]}>
+      <View
+        {...containerProps}
+        style={[style.defaultContainerStyle, containerStyle]}
+      >
         <View style={style.titleWrapper}>
-          <Text
-            {...titleProps}
-            style={[style.defaultTitleStyle, titleStyle]}
-          >
+          <Text {...titleProps} style={[style.defaultTitleStyle, titleStyle]}>
             {title}
           </Text>
           {description ? (
@@ -102,9 +115,12 @@ class SettingsSwitch extends Component {
               {description}
             </Text>
           ) : null}
-          {(disabled) ? (
+          {disabled ? (
             <View
-              style={[style.defaultDisabledOverlayStyle, (disabled) ? disabledOverlayStyle : null]}
+              style={[
+                style.defaultDisabledOverlayStyle,
+                disabled ? disabledOverlayStyle : null,
+              ]}
             />
           ) : null}
         </View>

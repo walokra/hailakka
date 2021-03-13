@@ -10,7 +10,6 @@
     "sourceType": "module",
   },
   "rules": {
-    "semi": ["error", "never"],
     "quotes": ["error", "single"],
     "comma-dangle": ["error", "never"],
     "@typescript-eslint/explicit-function-return-type": "off",
