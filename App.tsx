@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import {
   StatusBar,
@@ -32,20 +32,20 @@ import SettingsScreen from './screens/SettingsScreen';
 
 import store from './store';
 import { Category } from './models/Category';
-import { domainToUse } from './config/api';
+
+const DEFAULT_CONTEXT = {
+  htmlFilename: 'uutiset',
+  title: 'Uutiset',
+};
+
+export const CategoryContext = createContext(DEFAULT_CONTEXT);
 
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <Header {...props} />
 
-      <DrawerItemList
-        {...props}
-        onItemPress={(route, focused) => {
-          props.onItemPress({ route, focused });
-          console.log(`item pressed: ${route}`);
-        }}
-      />
+      <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
 }
@@ -53,12 +53,23 @@ function CustomDrawerContent(props) {
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-function Root() {
+function Root(props) {
+  // console.log({ props });
+  const { title, htmlFilename } = props.item;
+
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Highlakka" component={HomeScreen} />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
-    </Stack.Navigator>
+    <CategoryContext.Provider value={{ htmlFilename, title }}>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Highlakka"
+          component={HomeScreen}
+          options={{
+            title: `Highlakka: ${title}`,
+          }}
+        />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+      </Stack.Navigator>
+    </CategoryContext.Provider>
   );
 }
 
@@ -91,6 +102,7 @@ function App() {
 
   useEffect(() => {
     // const languages = listLanguages("high.fi")
+    const domainToUse = 'fi.high.fi';
     listCategories(
       domainToUse,
       'Suosituimmat',
@@ -152,7 +164,7 @@ function App() {
                 <Drawer.Screen
                   key={item.sectionID}
                   name={item.title + '_' + item.sectionID}
-                  component={Root}
+                  component={(props) => <Root {...props} item={item} />}
                   options={{ drawerLabel: item.title }}
                 />
               ))

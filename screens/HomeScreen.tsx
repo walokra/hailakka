@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -10,7 +10,9 @@ import {
 import * as WebBrowser from 'expo-web-browser';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
-import { createApiEndpoint } from '../config/api';
+import { createApiEndpoint } from '../controllers/api';
+// import Header from '../components/HomeScreenHeader';
+import { CategoryContext } from '../App';
 
 const init: RequestInit = {
   method: 'GET',
@@ -23,23 +25,28 @@ const init: RequestInit = {
 interface Props {
   isLoading: boolean;
   isError: boolean;
-  category: string;
 }
 
-const Homescreen: React.FC<Props> = ({ category = 'uutiset' }) => {
+export default function Homescreen({ route, navigation }) {
+  const { htmlFilename } = useContext(CategoryContext);
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const { colors } = useTheme();
 
+  // 'https://fi.high.fi/uutiset/json-private?APIKEY=1234567890';
   useEffect(() => {
-    const apiRequest = new Request(createApiEndpoint(category), init);
+    const apiRequest = new Request(
+      createApiEndpoint(
+        'fi.high.fi',
+        `${htmlFilename}/json-private?APIKEY=123`,
+      ),
+      init,
+    );
     fetch(apiRequest)
-      .then((response) => {
-        const resp = response.json();
-        console.log({ resp });
-        return resp;
+      .then(async (response) => {
+        return response.json();
       })
       .then((data) => {
         // console.log(data)
@@ -86,6 +93,7 @@ const Homescreen: React.FC<Props> = ({ category = 'uutiset' }) => {
         style={[styles.container, { backgroundColor: colors.card }]}
         contentContainerStyle={[styles.contentContainer]}
       >
+        {/* <Header {...props} selectedCategory={selectedCategory} /> */}
         <View style={styles.articleContainer}>
           {articles.map((item, index) => (
             <View key={index} style={styles.article}>
@@ -122,7 +130,7 @@ const Homescreen: React.FC<Props> = ({ category = 'uutiset' }) => {
       </View>
     </View>
   );
-};
+}
 
 function handlePoweredPress() {
   WebBrowser.openBrowserAsync('https://high.fi');
@@ -184,5 +192,3 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
-
-export default Homescreen;

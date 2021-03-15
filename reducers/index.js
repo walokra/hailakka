@@ -18,12 +18,12 @@ const Settings = (state = INITIAL_STATE, action) => {
     case 'TOGGLE_THEME':
       switch (action.payload) {
         case true:
-          return { darkModeEnabled: true };
+          return { ...state, darkModeEnabled: true };
         case false:
-          return { darkModeEnabled: false };
+          return { ...state, darkModeEnabled: false };
       }
     default:
-      return false;
+      return state;
   }
 };
 

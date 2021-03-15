@@ -1,37 +1,18 @@
 import React from 'react';
 import { View, StyleSheet, Text, Button } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@react-navigation/native';
-
-import Switch from 'expo-dark-mode-switch';
-
-import { toggleTheme } from '../reducers';
 
 function Header(props) {
   const { colors } = useTheme();
-  const darkModeEnabled = useSelector(
-    (state) => state.Settings.darkModeEnabled,
-  );
-  const dispatch = useDispatch();
 
-  // const { navigation } = props;
-
+  const capitalizedCategory = props.selectedCategory.charAt(0).toUpperCase() + props.selectedCategory.slice(1)
   return (
     <View style={styles.switchContainerStyle}>
       <View style={styles.titleWrapper}>
         <Text style={[styles.switchTitleStyle, { color: colors.text }]}>
-          Highlakka
+          {`${capitalizedCategory}`}
         </Text>
       </View>
-      <View style={styles.switchWrapperStyle}>
-        <Switch
-          value={darkModeEnabled}
-          onChange={(value) => {
-            dispatch(toggleTheme(value));
-          }}
-        />
-      </View>
-      {/* <Button title="S" onPress={() => navigation.navigate('Settings')} /> */}
     </View>
   );
 }

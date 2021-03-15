@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 // import { Language } from '../models/Language';
 import { Category } from '../models/Category';
 
@@ -5,6 +7,24 @@ import { Category } from '../models/Category';
 const API_KEY = '1234567890';
 const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
 // const domainToUse = 'high.fi';
+
+// http://en.high.fi/api/help
+
+// const domainToUse =
+//   Platform.OS === 'web'
+//     ? 'cors-anywhere.herokuapp.com/https://high.fi/'
+//     : 'high.fi';
+
+// const apiEndpoint =
+//   Platform.OS === 'web'
+//     ? 'https://cors-anywhere.herokuapp.com/https://fi.high.fi/uutiset/json-private?APIKEY=1234567890'
+//     : 'https://fi.high.fi/uutiset/json-private?APIKEY=1234567890';
+
+const proxy = Platform.OS === 'web' ? 'http://0.0.0.0:8080/' : '';
+
+export const createApiEndpoint = (domainToUse: string, endpoint: string) => {
+  return `${proxy}https://${domainToUse}/${endpoint}`;
+};
 
 const init: RequestInit = {
   method: 'GET',
@@ -79,8 +99,7 @@ const init: RequestInit = {
 
 // http://high.fi/api/?act=listLanguages&APIKEY=123456
 export const listLanguages = async (domainToUse: string) => {
-  const url =
-    'https://' + domainToUse + '/api/?act=listLanguages&APIKEY=' + API_KEY;
+  const url = `${createApiEndpoint(domainToUse, '/api/?act=listLanguages')}`;
   //console.debug("high.js, listLanguages, url=" + url);
 
   const apiRequest = new Request(url, init);
@@ -166,13 +185,7 @@ export const listCategories = async (
   };
   categories.push(latest);
 
-  const url =
-    'https://' +
-    domainToUse +
-    '/api/?act=listCategories&usedLanguage=' +
-    useToRetrieveLists +
-    '&APIKEY=' +
-    API_KEY;
+  const url = `${createApiEndpoint(domainToUse, `/api/?act=listCategories&usedLanguage=${useToRetrieveLists}&APIKEY=${API_KEY}`)}`;
   // console.debug("api.ts, listLanguages, url=" + url);
 
   const apiRequest = new Request(url, init);
@@ -183,7 +196,6 @@ export const listCategories = async (
 
     const items = data.responseData.categories;
 
-    const categories = [];
     items.forEach((entry: Category) => {
       const item = {};
       for (const key in entry) {
