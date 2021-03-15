@@ -20,7 +20,8 @@ const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
 //     ? 'https://cors-anywhere.herokuapp.com/https://fi.high.fi/uutiset/json-private?APIKEY=1234567890'
 //     : 'https://fi.high.fi/uutiset/json-private?APIKEY=1234567890';
 
-const proxy = Platform.OS === 'web' ? 'http://0.0.0.0:8080/' : '';
+// const proxy = Platform.OS === 'web' ? 'http://0.0.0.0:8080/' : '';
+const proxy = '';
 
 export const createApiEndpoint = (domainToUse: string, endpoint: string) => {
   return `${proxy}https://${domainToUse}/${endpoint}`;

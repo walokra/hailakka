@@ -10,9 +10,11 @@ import {
 import * as WebBrowser from 'expo-web-browser';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
+import { DateTime } from 'luxon';
 import { createApiEndpoint } from '../controllers/api';
 // import Header from '../components/HomeScreenHeader';
 import { CategoryContext } from '../App';
+import timeSince from '../components/utils';
 
 const init: RequestInit = {
   method: 'GET',
@@ -29,7 +31,7 @@ interface Props {
 
 export default function Homescreen({ route, navigation }) {
   const { htmlFilename } = useContext(CategoryContext);
-  const [articles, setArticles] = useState([]);
+  const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -53,8 +55,26 @@ export default function Homescreen({ route, navigation }) {
         const items = data.responseData.feed.entries;
         return items;
       })
-      .then((articles) => {
-        setArticles(articles);
+      .then(async (items) => {
+        setSections([]);
+
+        items.map((item, index) => {
+          const article = {
+            ...item,
+            timeSince: timeSince(item.publishedDateJS),
+            publishedDate: DateTime.fromISO(item.publishedDateJS)
+              .toLocal()
+              .toFormat('ccc d.m.yyyy HH:mm'),
+          };
+          if (!sections[article.timeSince]) {
+            sections[article.timeSince] = [article];
+          } else {
+            sections[article.timeSince].push(article);
+          }
+        });
+        // console.log({sections});
+
+        setSections(sections);
         setLoading(false);
         setError(false);
       })
@@ -93,25 +113,41 @@ export default function Homescreen({ route, navigation }) {
         style={[styles.container, { backgroundColor: colors.card }]}
         contentContainerStyle={[styles.contentContainer]}
       >
-        {/* <Header {...props} selectedCategory={selectedCategory} /> */}
         <View style={styles.articleContainer}>
-          {articles.map((item, index) => (
-            <View key={index} style={styles.article}>
-              <TouchableOpacity
-                onPress={() => WebBrowser.openBrowserAsync(item.link)}
-              >
-                <Text style={[styles.title, { color: colors.text }]}>
-                  {item.title}
-                </Text>
-                <Text style={[styles.source, { color: colors.text }]}>
-                  {item.author} - {item.publishedDateJS}
-                </Text>
-                <Text style={[styles.description, { color: colors.text }]}>
-                  {item.shortDescription}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+          {Object.keys(sections).map((section, index) => {
+            return (
+              <View key={index}>
+                <View style={styles.article}>
+                  <Text style={[styles.title, { color: colors.text }]}>
+                    {section}
+                  </Text>
+                </View>
+                {sections[section].map((article, index) => {
+                  return (
+                    <View key={index} style={styles.article}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          WebBrowser.openBrowserAsync(article.link)
+                        }
+                      >
+                        <Text style={[styles.title, { color: colors.text }]}>
+                          {article.title}
+                        </Text>
+                        <Text style={[styles.source, { color: colors.text }]}>
+                          {article.author} - {article.publishedDate}
+                        </Text>
+                        <Text
+                          style={[styles.description, { color: colors.text }]}
+                        >
+                          {article.shortDescription}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     );
