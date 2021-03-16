@@ -14,7 +14,8 @@ import { DateTime } from 'luxon';
 import { createApiEndpoint } from '../controllers/api';
 // import Header from '../components/HomeScreenHeader';
 import { CategoryContext } from '../App';
-import timeSince from '../components/utils';
+import { timeSince, getOrder } from '../components/utils';
+import { Entry } from '../models/Entry';
 
 const init: RequestInit = {
   method: 'GET',
@@ -58,25 +59,74 @@ export default function Homescreen({ route, navigation }) {
       .then(async (items) => {
         setSections([]);
 
-        items.map((item, index) => {
-          const article = {
-            ...item,
-            timeSince: timeSince(item.publishedDateJS),
-            publishedDate: DateTime.fromISO(item.publishedDateJS)
-              .toLocal()
-              .toFormat('ccc d.m.yyyy HH:mm'),
-          };
-          if (!sections[article.timeSince]) {
-            sections[article.timeSince] = [article];
-          } else {
-            sections[article.timeSince].push(article);
-          }
-        });
-        // console.log({sections});
+        // Top items are not grouped by time but by ranking
+        if (htmlFilename == 'top') {
+          let i = 0;
+          let range = ' 1 ..10';
+          items.forEach((entry: Entry) => {
+            if (i < 10) {
+              range = ' 1 ..10';
+            } else if (i < 20) {
+              range = ' 11 ..20';
+            } else if (i < 30) {
+              range = ' 21 ..30';
+            } else if (i < 40) {
+              range = ' 31 ..40';
+            } else if (i < 50) {
+              range = ' 41 ..50';
+            } else if (i < 60) {
+              range = ' 51 ..60';
+            } else if (i < 70) {
+              range = ' 61 ..70';
+            } else {
+              range = ' 70 ...';
+            }
 
-        setSections(sections);
-        setLoading(false);
-        setError(false);
+            if (!sections[range]) {
+              sections[range] = [entry];
+            } else {
+              sections[range].push(entry);
+            }
+            i += 1;
+          });
+
+          setSections(sections);
+          setLoading(false);
+          setError(false);
+        } else {
+          const newsEntries = [];
+
+          items.map((item, index) => {
+            const article = {
+              ...item,
+              timeSince: timeSince(item.publishedDateJS),
+              orderNo: getOrder(item.publishedDateJS),
+              publishedDate: DateTime.fromISO(item.publishedDateJS)
+                .toLocal()
+                .toFormat('ccc d.m.yyyy HH:mm'),
+            };
+
+            newsEntries.push(article);
+          });
+
+          // Other categories are grouped by time
+          newsEntries.sort((a: Entry, b: Entry) => a.orderNo < b.orderNo);
+
+          newsEntries.forEach((entry: Entry) => {
+            // Put each item in a section
+            // If we don't have section for particular time, create new one,
+            // Otherwise just add item to existing section
+            if (!sections[entry.timeSince]) {
+              sections[entry.timeSince] = [entry];
+            } else {
+              sections[entry.timeSince].push(entry);
+            }
+          });
+
+          setSections(sections);
+          setLoading(false);
+          setError(false);
+        }
       })
       .catch((error) => {
         console.error(error);
