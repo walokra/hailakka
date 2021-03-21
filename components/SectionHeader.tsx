@@ -1,26 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 
-export default function SectionHeader({ section }) {
-  const { colors } = useTheme();
-
+const SectionHeader = ({ section, colors }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>{section}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#eee',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    // flexDirection: 'column',
+    // alignItems: 'flex-start',
+    // justifyContent: 'flex-start',
+    alignSelf: 'stretch',
     paddingVertical: 5,
   },
   title: {
     fontSize: 15,
   },
 });
+
+export default SectionHeader;

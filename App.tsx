@@ -1,14 +1,14 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import {
   StatusBar,
   StyleSheet,
   View,
-  SafeAreaView,
   Text,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import {
   NavigationContainer,
   DefaultTheme,
@@ -32,16 +32,11 @@ import SettingsScreen from './screens/SettingsScreen';
 
 import store from './store';
 
+import { CategoryContext } from './context/CategoryContext';
+
 import { Category } from './models/Category';
 
-const DEFAULT_CONTEXT = {
-  htmlFilename: 'uutiset',
-  title: 'Uutiset',
-};
-
-export const CategoryContext = createContext(DEFAULT_CONTEXT);
-
-function CustomDrawerContent(props) {
+const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <Header {...props} />
@@ -49,13 +44,12 @@ function CustomDrawerContent(props) {
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
-}
+};
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-function Root(props) {
-  // console.log({ props });
+const Root = (props) => {
   const { title, htmlFilename } = props.item;
 
   return (
@@ -72,7 +66,7 @@ function Root(props) {
       </Stack.Navigator>
     </CategoryContext.Provider>
   );
-}
+};
 
 function EmptyScreen() {
   return (
@@ -98,8 +92,8 @@ function App() {
 
   const themeStatusBarStyle =
     colorScheme == 'light' && !darkModeEnabled
-      ? 'dark-content'
-      : 'light-content';
+      ? 'light-content'
+      : 'dark-content';
 
   useEffect(() => {
     // const languages = listLanguages("high.fi")
@@ -129,52 +123,59 @@ function App() {
   } else {
     if (loading) {
       return (
-        <SafeAreaView style={[styles.container]}>
-          <ActivityIndicator animating={true} />
-        </SafeAreaView>
+        <SafeAreaProvider>
+          <SafeAreaView style={[styles.container]}>
+            <ActivityIndicator animating={true} />
+          </SafeAreaView>
+        </SafeAreaProvider>
       );
     }
 
     if (error) {
       return (
-        <SafeAreaView style={[styles.container]}>
-          <Text>Failed to load news!</Text>
-        </SafeAreaView>
+        <SafeAreaProvider>
+          <SafeAreaView style={[styles.container]}>
+            <Text>Failed to load news!</Text>
+          </SafeAreaView>
+        </SafeAreaProvider>
       );
     }
 
     return (
-      <View style={[styles.container]}>
-        <StatusBar barStyle={themeStatusBarStyle} />
+      <SafeAreaProvider>
         <NavigationContainer
           theme={
-            colorScheme === 'light' || darkModeEnabled
-              ? DarkTheme
-              : DefaultTheme
+            colorScheme === 'light' && !darkModeEnabled
+              ? DefaultTheme
+              : DarkTheme
           }
         >
-          <Drawer.Navigator
-            drawerType={isLargeScreen ? 'permanent' : 'back'}
-            drawerStyle={isLargeScreen ? null : { width: '100%' }}
-            overlayColor="transparent"
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
-            initialRouteName="Root"
-          >
-            {categories && categories.length > 0 ? (
-              categories.map((item: Category, index) => (
-                <Drawer.Screen
-                  key={item.sectionID}
-                  name={item.title + '_' + item.sectionID}
-                  component={(props) => <Root {...props} item={item} />}
-                  options={{ drawerLabel: item.title }}
-                />
-              ))
-            ) : (
-              <Drawer.Screen name="empty" component={EmptyScreen} />
-            )}
-          </Drawer.Navigator>
+          <View style={[styles.container]}>
+            <StatusBar barStyle={themeStatusBarStyle} />
+
+            <Drawer.Navigator
+              drawerType={isLargeScreen ? 'permanent' : 'back'}
+              drawerStyle={isLargeScreen ? null : { width: '100%' }}
+              overlayColor="transparent"
+              drawerContent={CustomDrawerContent}
+              initialRouteName="Root"
+            >
+              {categories && categories.length > 0 ? (
+                categories.map((item: Category, index) => (
+                  <Drawer.Screen
+                    key={item.sectionID}
+                    name={item.title + '_' + item.sectionID}
+                    children={() => <Root item={item} />}
+                    options={{ drawerLabel: item.title }}
+                  />
+                ))
+              ) : (
+                <Drawer.Screen name="empty" component={EmptyScreen} />
+              )}
+            </Drawer.Navigator>
+          </View>
         </NavigationContainer>
-      </View>
+      </SafeAreaProvider>
     );
   }
 }

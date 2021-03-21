@@ -6,8 +6,8 @@ export type Entry = {
   clickTrackingLink: string;
   author: string;
   publishedDateJS: string;
-  picture: ImageSourcePropType;
-  originalPicture: ImageSourcePropType;
+  picture: string;
+  originalPicture: string;
   shortDescription: string;
   originalURL: string;
   mobileLink: string;

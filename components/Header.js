@@ -7,7 +7,7 @@ import Switch from 'expo-dark-mode-switch';
 
 import { toggleTheme } from '../reducers';
 
-function Header(props) {
+const Header = (props) => {
   const { colors } = useTheme();
   const darkModeEnabled = useSelector(
     (state) => state.Settings.darkModeEnabled,
@@ -41,7 +41,7 @@ export default Header;
 const styles = StyleSheet.create({
   switchContainerStyle: {
     padding: 0,
-    minHeight: 50,
+    minHeight: 25,
     alignItems: 'center',
     flexDirection: 'row',
   },

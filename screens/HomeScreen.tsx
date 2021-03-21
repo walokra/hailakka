@@ -13,8 +13,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
 import { DateTime } from 'luxon';
 import { createApiEndpoint } from '../controllers/api';
-// import Header from '../components/HomeScreenHeader';
-import { CategoryContext } from '../App';
+import { CategoryContext } from '../context/CategoryContext';
 
 import { timeSince, getOrder } from '../components/utils';
 import SectionHeader from '../components/SectionHeader';
@@ -171,46 +170,41 @@ export default function Homescreen({ route, navigation }) {
         style={[styles.container, { backgroundColor: colors.card }]}
         contentContainerStyle={[styles.contentContainer]}
       >
-        <View style={styles.articleContainer}>
-          {Object.keys(sections).map((section, index) => {
-            return (
-              <View key={index}>
-                <SectionHeader section={section} />
-                {sections[section].map((article: Entry, index) => {
-                  // console.log({ article });
-                  return (
-                    <TouchableOpacity
-                      onPress={() => WebBrowser.openBrowserAsync(article.link)}
-                    >
-                      <View key={index} style={styles.entryContainer}>
-                        <Image
-                          source={article.picture}
-                          style={[
-                            styles.entryImage,
-                            { width: 100, height: 100 },
-                          ]}
-                        />
-                        <View style={styles.entryContent}>
-                          <Text style={[styles.title, { color: colors.text }]}>
-                            {article.title}
-                          </Text>
-                          <Text style={[styles.source, { color: colors.text }]}>
-                            {article.author} - {article.publishedDate}
-                          </Text>
-                          <Text
-                            style={[styles.description, { color: colors.text }]}
-                          >
-                            {article.shortDescription}
-                          </Text>
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            );
-          })}
-        </View>
+        {Object.keys(sections).map((section, index) => {
+          return (
+            <View key={index} style={styles.articleContainer}>
+              <SectionHeader section={section} colors={colors} />
+              {sections[section].map((article: Entry, index) => {
+                // console.log({ article });
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => WebBrowser.openBrowserAsync(article.link)}
+                    style={styles.entryContainer}
+                  >
+                    <Image
+                      source={{ uri: article.picture }}
+                      style={[styles.entryImage]}
+                    />
+                    <View style={styles.entryContent}>
+                      <Text style={[styles.title, { color: colors.text }]}>
+                        {article.title}
+                      </Text>
+                      <Text style={[styles.source, { color: colors.text }]}>
+                        {article.author} - {article.publishedDate}
+                      </Text>
+                      <Text
+                        style={[styles.description, { color: colors.text }]}
+                      >
+                        {article.shortDescription}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          );
+        })}
       </ScrollView>
     );
   };
@@ -237,20 +231,17 @@ function handlePoweredPress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   contentContainer: {
     alignItems: 'baseline',
   },
   articleContainer: {
+    flex: 1,
     alignItems: 'baseline',
-    marginBottom: 5,
-    marginLeft: 10,
-    marginRight: 10,
   },
   footerContainer: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 5,
     left: 0,
     right: 0,
     ...Platform.select({
@@ -265,7 +256,7 @@ const styles = StyleSheet.create({
       },
     }),
     alignItems: 'center',
-    backgroundColor: '#fbfbfb',
+    // backgroundColor: '#fbfbfb',
   },
   footerInfoText: {
     fontSize: 10,
@@ -274,27 +265,33 @@ const styles = StyleSheet.create({
   },
   entryContainer: {
     paddingVertical: 5,
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingTop: 10,
   },
   entryImage: {
     alignItems: 'flex-start',
+    width: 100,
+    height: 100,
   },
   entryContent: {
-    display: 'flex',
+    flex: 1,
     flexDirection: 'column',
     paddingHorizontal: 10,
-    flexFlow: 'row wrap',
-    flex: 1,
+    // borderColor: 'red',
+    // borderWidth: 1,
   },
   title: {
     fontSize: 15,
+    minWidth: 0,
   },
   source: {
     fontSize: 12,
   },
   description: {
+    minWidth: 0,
     fontSize: 14,
     marginTop: 3,
   },
