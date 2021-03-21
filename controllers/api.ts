@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 // import { Language } from '../models/Language';
 import { Category } from '../models/Category';
 
-// const HIGH_FI_API = 'json-private';
+const HIGH_FI_API = 'json-private';
 const API_KEY = '1234567890';
 const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
 // const domainToUse = 'high.fi';
@@ -24,14 +24,15 @@ const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
 const proxy = '';
 
 export const createApiEndpoint = (domainToUse: string, endpoint: string) => {
-  return `${proxy}https://${domainToUse}/${endpoint}`;
+  return `${proxy}https://${domainToUse}/${endpoint}/${HIGH_FI_API}?APIKEY=${API_KEY}`;
 };
 
-const init: RequestInit = {
+export const init: RequestInit = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
-    'User-Agent': USER_AGENT,
+    // FIXME: Can't send User-Agent to high.fi API due CORS
+    // 'User-Agent': USER_AGENT,
   },
 };
 
@@ -186,7 +187,10 @@ export const listCategories = async (
   };
   categories.push(latest);
 
-  const url = `${createApiEndpoint(domainToUse, `/api/?act=listCategories&usedLanguage=${useToRetrieveLists}&APIKEY=${API_KEY}`)}`;
+  const url = `${createApiEndpoint(
+    domainToUse,
+    `/api/?act=listCategories&usedLanguage=${useToRetrieveLists}&APIKEY=${API_KEY}`,
+  )}`;
   // console.debug("api.ts, listLanguages, url=" + url);
 
   const apiRequest = new Request(url, init);

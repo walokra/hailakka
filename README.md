@@ -19,3 +19,10 @@ On a simulator or emulator:
 - Pressing a will open in an Android emulator or connected device.
 - Pressing w will open in your browser. Expo supports all major browsers.
   
+## Deployment
+
+Create build
+
+```
+expo build:web
+```

@@ -12,22 +12,13 @@ import * as WebBrowser from 'expo-web-browser';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
 import { DateTime } from 'luxon';
-import { createApiEndpoint } from '../controllers/api';
+import { createApiEndpoint, init } from '../controllers/api';
 import { CategoryContext } from '../context/CategoryContext';
 
 import { timeSince, getOrder } from '../components/utils';
 import SectionHeader from '../components/SectionHeader';
 
 import { Entry } from '../models/Entry';
-
-const init: RequestInit = {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
-    'User-Agent': 'Highlakka',
-  },
-};
-
 interface Props {
   isLoading: boolean;
   isError: boolean;
@@ -48,10 +39,7 @@ export default function Homescreen({ route, navigation }) {
   // 'https://fi.high.fi/uutiset/json-private?APIKEY=1234567890';
   useEffect(() => {
     const apiRequest = new Request(
-      createApiEndpoint(
-        'fi.high.fi',
-        `${htmlFilename}/json-private?APIKEY=123`,
-      ),
+      createApiEndpoint('fi.high.fi', `${htmlFilename}`),
       init,
     );
     fetch(apiRequest)
