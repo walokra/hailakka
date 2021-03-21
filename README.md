@@ -1,4 +1,4 @@
-# Highlakka
+# Hailakka
 
 News reader client for High.fi done with (Expo)[https://expo.io/]. 
 For native clients see: Highkara for iOS.

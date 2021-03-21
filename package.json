@@ -1,4 +1,15 @@
 {
+  "name": "hailakka",
+  "version": "0.1.0",
+  "description": " High.fi client with Expo",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:walokra/hailakka.git"
+  },
+  "keywords": [
+    "expo",
+    "react native"
+  ],
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

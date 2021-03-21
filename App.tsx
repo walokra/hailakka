@@ -31,6 +31,7 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
 import store from './store';
+
 import { Category } from './models/Category';
 
 const DEFAULT_CONTEXT = {
