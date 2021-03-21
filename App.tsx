@@ -91,7 +91,7 @@ function App() {
   const [error, setError] = useState(false);
 
   const themeStatusBarStyle =
-    colorScheme == 'light' && !darkModeEnabled
+    colorScheme == 'light' || !darkModeEnabled
       ? 'light-content'
       : 'dark-content';
 
@@ -145,7 +145,7 @@ function App() {
       <SafeAreaProvider>
         <NavigationContainer
           theme={
-            colorScheme === 'light' && !darkModeEnabled
+            colorScheme === 'light' || !darkModeEnabled
               ? DefaultTheme
               : DarkTheme
           }
