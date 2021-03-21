@@ -11,10 +11,10 @@
       "web"
     ],
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-logo_1024x1024.png",
     "scheme": "highlakka",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/launch-image_1242x2436.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
