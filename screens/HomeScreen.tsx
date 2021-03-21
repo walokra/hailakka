@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
@@ -14,7 +15,10 @@ import { DateTime } from 'luxon';
 import { createApiEndpoint } from '../controllers/api';
 // import Header from '../components/HomeScreenHeader';
 import { CategoryContext } from '../App';
+
 import { timeSince, getOrder } from '../components/utils';
+import SectionHeader from '../components/SectionHeader';
+
 import { Entry } from '../models/Entry';
 
 const init: RequestInit = {
@@ -30,9 +34,13 @@ interface Props {
   isError: boolean;
 }
 
+export interface ISections {
+  section: [Entry];
+}
+
 export default function Homescreen({ route, navigation }) {
   const { htmlFilename } = useContext(CategoryContext);
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState<ISections[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -51,7 +59,7 @@ export default function Homescreen({ route, navigation }) {
       .then(async (response) => {
         return response.json();
       })
-      .then((data) => {
+      .then((data): [Entry] => {
         // console.log(data)
         const items = data.responseData.feed.entries;
         return items;
@@ -94,7 +102,7 @@ export default function Homescreen({ route, navigation }) {
           setLoading(false);
           setError(false);
         } else {
-          const newsEntries = [];
+          const newsEntries = [] as Entry[];
 
           items.map((item, index) => {
             const article = {
@@ -110,9 +118,9 @@ export default function Homescreen({ route, navigation }) {
           });
 
           // Other categories are grouped by time
-          newsEntries.sort((a: Entry, b: Entry) => a.orderNo < b.orderNo);
+          newsEntries.sort((a, b) => a.orderNo - b.orderNo);
 
-          newsEntries.forEach((entry: Entry) => {
+          newsEntries.forEach((entry) => {
             // Put each item in a section
             // If we don't have section for particular time, create new one,
             // Otherwise just add item to existing section
@@ -167,32 +175,36 @@ export default function Homescreen({ route, navigation }) {
           {Object.keys(sections).map((section, index) => {
             return (
               <View key={index}>
-                <View style={styles.article}>
-                  <Text style={[styles.title, { color: colors.text }]}>
-                    {section}
-                  </Text>
-                </View>
-                {sections[section].map((article, index) => {
+                <SectionHeader section={section} />
+                {sections[section].map((article: Entry, index) => {
+                  // console.log({ article });
                   return (
-                    <View key={index} style={styles.article}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          WebBrowser.openBrowserAsync(article.link)
-                        }
-                      >
-                        <Text style={[styles.title, { color: colors.text }]}>
-                          {article.title}
-                        </Text>
-                        <Text style={[styles.source, { color: colors.text }]}>
-                          {article.author} - {article.publishedDate}
-                        </Text>
-                        <Text
-                          style={[styles.description, { color: colors.text }]}
-                        >
-                          {article.shortDescription}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity
+                      onPress={() => WebBrowser.openBrowserAsync(article.link)}
+                    >
+                      <View key={index} style={styles.entryContainer}>
+                        <Image
+                          source={article.picture}
+                          style={[
+                            styles.entryImage,
+                            { width: 100, height: 100 },
+                          ]}
+                        />
+                        <View style={styles.entryContent}>
+                          <Text style={[styles.title, { color: colors.text }]}>
+                            {article.title}
+                          </Text>
+                          <Text style={[styles.source, { color: colors.text }]}>
+                            {article.author} - {article.publishedDate}
+                          </Text>
+                          <Text
+                            style={[styles.description, { color: colors.text }]}
+                          >
+                            {article.shortDescription}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
                   );
                 })}
               </View>
@@ -260,8 +272,21 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     textAlign: 'center',
   },
-  article: {
+  entryContainer: {
     paddingVertical: 5,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  entryImage: {
+    alignItems: 'flex-start',
+  },
+  entryContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    paddingHorizontal: 10,
+    flexFlow: 'row wrap',
+    flex: 1,
   },
   title: {
     fontSize: 15,

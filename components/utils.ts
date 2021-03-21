@@ -46,7 +46,7 @@ export const getOrder = (datetime: string): number => {
  * Calculates time difference to current time for given time.
  * "publishedDateJS": "2015-03-27T09:58:13.000Z",
  */
-export const timeSince = (datetime: string): String => {
+export const timeSince = (datetime: string): string => {
   const newsTime = DateTime.fromISO(datetime);
   let diff = newsTime.diffNow(['days', 'hours', 'minutes']).toObject(); // milliseconds
 

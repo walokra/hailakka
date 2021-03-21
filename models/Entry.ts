@@ -1,11 +1,13 @@
+import { ImageSourcePropType } from "react-native";
+
 export type Entry = {
   title: string;
   link: string;
   clickTrackingLink: string;
   author: string;
   publishedDateJS: string;
-  picture: string;
-  originalPicture: string;
+  picture: ImageSourcePropType;
+  originalPicture: ImageSourcePropType;
   shortDescription: string;
   originalURL: string;
   mobileLink: string;
@@ -20,4 +22,5 @@ export type Entry = {
   highlightType: string;
   timeSince: string;
   orderNo: number;
+  publishedDate: string;
 };
