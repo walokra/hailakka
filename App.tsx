@@ -49,7 +49,7 @@ const CustomDrawerContent = (props) => {
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-const Root = (props) => {
+const Root = (props): JSX.Element => {
   const { title, htmlFilename } = props.item;
 
   return (
@@ -79,7 +79,6 @@ function EmptyScreen() {
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-
   const dimensions = Dimensions.get('window');
   const isLargeScreen = dimensions.width >= 768;
 
@@ -91,7 +90,11 @@ function App() {
   const [error, setError] = useState(false);
 
   const themeStatusBarStyle =
-    colorScheme == 'light' || !darkModeEnabled
+    colorScheme === 'light'
+      ? darkModeEnabled
+        ? 'dark-content'
+        : 'light-content'
+      : !darkModeEnabled
       ? 'light-content'
       : 'dark-content';
 
@@ -120,67 +123,70 @@ function App() {
 
   if (!isLoadingComplete) {
     return null;
-  } else {
-    if (loading) {
-      return (
-        <SafeAreaProvider>
-          <SafeAreaView style={[styles.container]}>
-            <ActivityIndicator animating={true} />
-          </SafeAreaView>
-        </SafeAreaProvider>
-      );
-    }
-
-    if (error) {
-      return (
-        <SafeAreaProvider>
-          <SafeAreaView style={[styles.container]}>
-            <Text>Failed to load news!</Text>
-          </SafeAreaView>
-        </SafeAreaProvider>
-      );
-    }
-
+  }
+  if (loading) {
     return (
       <SafeAreaProvider>
-        <NavigationContainer
-          theme={
-            colorScheme === 'light' || !darkModeEnabled
-              ? DefaultTheme
-              : DarkTheme
-          }
-        >
-          <View style={[styles.container]}>
-            <StatusBar barStyle={themeStatusBarStyle} />
-
-            <Drawer.Navigator
-              drawerType={isLargeScreen ? 'permanent' : 'back'}
-              drawerStyle={isLargeScreen ? null : { width: '100%' }}
-              overlayColor="transparent"
-              drawerContent={CustomDrawerContent}
-              initialRouteName="Root"
-            >
-              {categories && categories.length > 0 ? (
-                categories.map((item: Category, index) => (
-                  <Drawer.Screen
-                    key={item.sectionID}
-                    name={item.title + '_' + item.sectionID}
-                    children={() => <Root item={item} />}
-                    options={{ drawerLabel: item.title }}
-                  />
-                ))
-              ) : (
-                <Drawer.Screen name="empty" component={EmptyScreen} />
-              )}
-            </Drawer.Navigator>
-          </View>
-        </NavigationContainer>
+        <SafeAreaView style={[styles.container]}>
+          <ActivityIndicator animating={true} />
+        </SafeAreaView>
       </SafeAreaProvider>
     );
   }
+
+  if (error) {
+    return (
+      <SafeAreaProvider>
+        <SafeAreaView style={[styles.container]}>
+          <Text>Failed to load news!</Text>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    );
+  }
+
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer
+        theme={
+          colorScheme === 'light'
+            ? darkModeEnabled
+              ? DarkTheme
+              : DefaultTheme
+            : !darkModeEnabled
+            ? DefaultTheme
+            : DarkTheme
+        }
+      >
+        <View style={[styles.container]}>
+          <StatusBar barStyle={themeStatusBarStyle} />
+
+          <Drawer.Navigator
+            drawerType={isLargeScreen ? 'permanent' : 'back'}
+            drawerStyle={isLargeScreen ? null : { width: '100%' }}
+            overlayColor="transparent"
+            drawerContent={CustomDrawerContent}
+            initialRouteName="Root"
+          >
+            {categories && categories.length > 0 ? (
+              categories.map((item: Category, index) => (
+                <Drawer.Screen
+                  key={item.sectionID}
+                  name={`${item.title}_${item.sectionID}`}
+                  children={() => <Root item={item} />}
+                  options={{ drawerLabel: item.title }}
+                />
+              ))
+            ) : (
+              <Drawer.Screen name="empty" component={EmptyScreen} />
+            )}
+          </Drawer.Navigator>
+        </View>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
 }
 
-export default function AppContainer() {
+export default function AppContainer(): JSX.Element {
   return (
     <AppearanceProvider>
       <Provider store={store}>

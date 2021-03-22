@@ -1,11 +1,11 @@
-import { Platform } from 'react-native';
+// import { Platform } from 'react-native';
 
 // import { Language } from '../models/Language';
 import { Category } from '../models/Category';
 
 const HIGH_FI_API = 'json-private';
 const API_KEY = '1234567890';
-const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
+// const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
 // const domainToUse = 'high.fi';
 
 // http://en.high.fi/api/help
@@ -23,7 +23,10 @@ const USER_AGENT = 'Highlakka, (0.0.1)-(1) (RN)';
 // const proxy = Platform.OS === 'web' ? 'http://0.0.0.0:8080/' : '';
 const proxy = '';
 
-export const createApiEndpoint = (domainToUse: string, endpoint: string) => {
+export const createApiEndpoint = (
+  domainToUse: string,
+  endpoint: string,
+): string => {
   return `${proxy}https://${domainToUse}/${endpoint}/${HIGH_FI_API}?APIKEY=${API_KEY}`;
 };
 
@@ -100,61 +103,61 @@ export const init: RequestInit = {
 // }
 
 // http://high.fi/api/?act=listLanguages&APIKEY=123456
-export const listLanguages = async (domainToUse: string) => {
-  const url = `${createApiEndpoint(domainToUse, '/api/?act=listLanguages')}`;
-  //console.debug("high.js, listLanguages, url=" + url);
+// export const listLanguages = async (domainToUse: string) => {
+//   const url = `${createApiEndpoint(domainToUse, '/api/?act=listLanguages')}`;
+//   // console.debug("high.js, listLanguages, url=" + url);
 
-  const apiRequest = new Request(url, init);
-  fetch(apiRequest)
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      // console.debug(data)
-      // {
-      //     "responseData": {
-      //       "supportedLanguages": [
-      //           {
-      //               "language": "Finnish",
-      //               "country": "Finland",
-      //               "domainToUse": "high.fi",
-      //               "languageCode": "fi-fi",
-      //               "mostPopularName": "Suosituimmat",
-      //               "latestName": "Uusimmat",
-      //               "useToRetrieveLists": "finnish",
-      //               "genericNewsURLPart": "uutiset"
-      //           },
-      //           {
-      //               "language": "English",
-      //               "country": "United States",
-      //               "domainToUse": "en.high.fi",
-      //               "languageCode": "en-us",
-      //               "mostPopularName": "Most Popular",
-      //               "latestName": "Latest News",
-      //               "useToRetrieveLists": "english",
-      //               "genericNewsURLPart": "news"
-      //           }
-      //       ]
-      //   }
-      // }
-      const items = data.responseData.supportedLanguages;
+//   const apiRequest = new Request(url, init);
+//   fetch(apiRequest)
+//     .then((response) => {
+//       return response.json();
+//     })
+//     .then((data) => {
+//       // console.debug(data)
+//       // {
+//       //     "responseData": {
+//       //       "supportedLanguages": [
+//       //           {
+//       //               "language": "Finnish",
+//       //               "country": "Finland",
+//       //               "domainToUse": "high.fi",
+//       //               "languageCode": "fi-fi",
+//       //               "mostPopularName": "Suosituimmat",
+//       //               "latestName": "Uusimmat",
+//       //               "useToRetrieveLists": "finnish",
+//       //               "genericNewsURLPart": "uutiset"
+//       //           },
+//       //           {
+//       //               "language": "English",
+//       //               "country": "United States",
+//       //               "domainToUse": "en.high.fi",
+//       //               "languageCode": "en-us",
+//       //               "mostPopularName": "Most Popular",
+//       //               "latestName": "Latest News",
+//       //               "useToRetrieveLists": "english",
+//       //               "genericNewsURLPart": "news"
+//       //           }
+//       //       ]
+//       //   }
+//       // }
+//       const items = data.responseData.supportedLanguages;
 
-      const languages = [];
-      items.forEach((entry) => {
-        const item = {};
-        for (const key in entry) {
-          item[key] = entry[key];
-        }
-        languages.push(item);
-      });
+//       const languages = [];
+//       items.forEach((entry) => {
+//         const item = {};
+//         for (const key in entry) {
+//           item[key] = entry[key];
+//         }
+//         languages.push(item);
+//       });
 
-      return languages;
-    })
-    .catch((error: Error) => {
-      console.error(error);
-      throw Error('Fetching languages failed! ' + error.message);
-    });
-};
+//       return languages;
+//     })
+//     .catch((error: Error) => {
+//       console.error(error);
+//       throw Error('Fetching languages failed! ' + error.message);
+//     });
+// };
 
 /**
   Returns full list of news categories available for the selected language.

@@ -21,6 +21,8 @@ const Settings = (state = INITIAL_STATE, action) => {
           return { ...state, darkModeEnabled: true };
         case false:
           return { ...state, darkModeEnabled: false };
+        default:
+          return { ...state, darkModeEnabled: false };
       }
     default:
       return state;

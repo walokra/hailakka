@@ -19,16 +19,90 @@ import { timeSince, getOrder } from '../components/utils';
 import SectionHeader from '../components/SectionHeader';
 
 import { Entry } from '../models/Entry';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  contentContainer: {
+    alignItems: 'baseline',
+  },
+  articleContainer: {
+    flex: 1,
+    alignItems: 'baseline',
+  },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 5,
+    left: 0,
+    right: 0,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: -3 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 20,
+      },
+    }),
+    alignItems: 'center',
+    // backgroundColor: '#fbfbfb',
+  },
+  footerInfoText: {
+    fontSize: 10,
+    color: 'rgba(96,100,109, 1)',
+    textAlign: 'center',
+  },
+  entryContainer: {
+    paddingVertical: 5,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingTop: 10,
+  },
+  entryImage: {
+    alignItems: 'flex-start',
+    width: 100,
+    height: 100,
+  },
+  entryContent: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingHorizontal: 10,
+    // borderColor: 'red',
+    // borderWidth: 1,
+  },
+  title: {
+    fontSize: 15,
+    minWidth: 0,
+  },
+  source: {
+    fontSize: 12,
+  },
+  description: {
+    minWidth: 0,
+    fontSize: 14,
+    marginTop: 3,
+  },
+  linkText: {
+    fontSize: 9,
+    color: '#2e78b7',
+  },
+});
+
 interface Props {
   isLoading: boolean;
   isError: boolean;
 }
 
-export interface ISections {
+interface ISections {
   section: [Entry];
 }
 
-export default function Homescreen({ route, navigation }) {
+const Homescreen = () => {
   const { htmlFilename } = useContext(CategoryContext);
   const [sections, setSections] = useState<ISections[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,7 +129,7 @@ export default function Homescreen({ route, navigation }) {
         setSections([]);
 
         // Top items are not grouped by time but by ranking
-        if (htmlFilename == 'top') {
+        if (htmlFilename === 'top') {
           let i = 0;
           let range = ' 1 ..10';
           items.forEach((entry: Entry) => {
@@ -91,7 +165,8 @@ export default function Homescreen({ route, navigation }) {
         } else {
           const newsEntries = [] as Entry[];
 
-          items.map((item, index) => {
+          // eslint-disable-next-line array-callback-return
+          items.map((item) => {
             const article = {
               ...item,
               timeSince: timeSince(item.publishedDateJS),
@@ -123,8 +198,9 @@ export default function Homescreen({ route, navigation }) {
           setError(false);
         }
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(e);
         setLoading(false);
         setError(true);
       })
@@ -210,81 +286,10 @@ export default function Homescreen({ route, navigation }) {
       </View>
     </View>
   );
-}
+};
 
 function handlePoweredPress() {
   WebBrowser.openBrowserAsync('https://high.fi');
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    alignItems: 'baseline',
-  },
-  articleContainer: {
-    flex: 1,
-    alignItems: 'baseline',
-  },
-  footerContainer: {
-    position: 'absolute',
-    bottom: 5,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    // backgroundColor: '#fbfbfb',
-  },
-  footerInfoText: {
-    fontSize: 10,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  entryContainer: {
-    paddingVertical: 5,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingTop: 10,
-  },
-  entryImage: {
-    alignItems: 'flex-start',
-    width: 100,
-    height: 100,
-  },
-  entryContent: {
-    flex: 1,
-    flexDirection: 'column',
-    paddingHorizontal: 10,
-    // borderColor: 'red',
-    // borderWidth: 1,
-  },
-  title: {
-    fontSize: 15,
-    minWidth: 0,
-  },
-  source: {
-    fontSize: 12,
-  },
-  description: {
-    minWidth: 0,
-    fontSize: 14,
-    marginTop: 3,
-  },
-  linkText: {
-    fontSize: 9,
-    color: '#2e78b7',
-  },
-});
+export default Homescreen;
