@@ -79,6 +79,7 @@ function EmptyScreen() {
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  console.log({ colorScheme });
   const dimensions = Dimensions.get('window');
   const isLargeScreen = dimensions.width >= 768;
 
@@ -90,7 +91,11 @@ function App() {
   const [error, setError] = useState(false);
 
   const themeStatusBarStyle =
-    colorScheme === 'light' || !darkModeEnabled
+    colorScheme === 'light'
+      ? darkModeEnabled
+        ? 'dark-content'
+        : 'light-content'
+      : !darkModeEnabled
       ? 'light-content'
       : 'dark-content';
 
@@ -144,7 +149,13 @@ function App() {
     <SafeAreaProvider>
       <NavigationContainer
         theme={
-          colorScheme === 'light' || !darkModeEnabled ? DefaultTheme : DarkTheme
+          colorScheme === 'light'
+            ? darkModeEnabled
+              ? DarkTheme
+              : DefaultTheme
+            : !darkModeEnabled
+            ? DefaultTheme
+            : DarkTheme
         }
       >
         <View style={[styles.container]}>
