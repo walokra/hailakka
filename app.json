@@ -1,20 +1,16 @@
 {
-  "name": "highlakka",
-  "displayName": "highlakka",
+  "name": "hailakka",
+  "displayName": "hailakka",
   "expo": {
-    "name": "highlakka",
-    "slug": "highlakka",
-    "version": "1.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "name": "hailakka",
+    "slug": "hailakka",
+    "version": "0.1.0",
+    "platforms": ["ios", "android", "web"],
     "orientation": "portrait",
-    "icon": "./assets/app-logo_1024x1024.png",
+    "icon": "./assets/icon.png",
     "scheme": "highlakka",
     "splash": {
-      "image": "./assets/launch-image_1242x2436.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,11 +18,11 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ruleoftech.hailakka",
+      "buildNumber": "0.1.0"
     }
   }
 }
