@@ -11,8 +11,8 @@ const INITIAL_STATE = {
 };
 
 const Settings = (state = INITIAL_STATE, action) => {
-  console.debug(action.type);
-  console.debug('payload: ', action.payload);
+  // console.debug(action.type);
+  // console.debug('payload: ', action.payload);
 
   switch (action.type) {
     case 'TOGGLE_THEME':
