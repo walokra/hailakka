@@ -79,7 +79,6 @@ function EmptyScreen() {
 function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  console.log({ colorScheme });
   const dimensions = Dimensions.get('window');
   const isLargeScreen = dimensions.width >= 768;
 
