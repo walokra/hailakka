@@ -29,7 +29,7 @@
     "@react-navigation/stack": "^5.14.5",
     "expo": "^41.0.0",
     "expo-asset": "~8.3.1",
-    "expo-dark-mode-switch": "github:walokra/expo-dark-mode-switch#upgrade-to-expo-40",
+    "expo-dark-mode-switch": "github:walokra/expo-dark-mode-switch#upgrade-to-expo-41",
     "expo-font": "~9.1.0",
     "expo-linking": "~2.2.3",
     "expo-splash-screen": "~0.10.2",
