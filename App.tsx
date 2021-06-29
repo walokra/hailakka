@@ -29,6 +29,7 @@ import Header from './components/Header';
 
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import WebViewScreen from './screens/WebViewScreen';
 
 import store from './store';
 
@@ -62,7 +63,18 @@ const Root = (props): JSX.Element => {
             title: `Highlakka: ${title}`,
           }}
         />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            title: `Settings`,
+          }}
+        />
+        <Stack.Screen
+          name="WebView"
+          component={WebViewScreen}
+          options={({ route }) => ({ title: route.params.title })}
+        />
       </Stack.Navigator>
     </CategoryContext.Provider>
   );

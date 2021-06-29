@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import * as WebBrowser from 'expo-web-browser';
+// import * as WebBrowser from 'expo-web-browser';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useTheme } from '@react-navigation/native';
 import { DateTime } from 'luxon';
@@ -102,7 +102,7 @@ interface ISections {
   section: [Entry];
 }
 
-const Homescreen = () => {
+const Homescreen = ({ navigation }) => {
   const { htmlFilename } = useContext(CategoryContext);
   const [sections, setSections] = useState<ISections[]>([]);
   const [loading, setLoading] = useState(true);
@@ -243,7 +243,13 @@ const Homescreen = () => {
                 return (
                   <TouchableOpacity
                     key={index}
-                    onPress={() => WebBrowser.openBrowserAsync(article.link)}
+                    onPress={() => {
+                      navigation.navigate('WebView', {
+                        link: article.link,
+                        title: article.title,
+                      });
+                      //WebBrowser.openBrowserAsync(article.link);
+                    }}
                     style={styles.entryContainer}
                   >
                     <Image
@@ -273,6 +279,14 @@ const Homescreen = () => {
     );
   };
 
+  function handlePoweredPress() {
+    // WebBrowser.openBrowserAsync('https://high.fi');
+    navigation.navigate('WebView', {
+      link: 'https://high.fi',
+      title: 'High.fi',
+    });
+  }
+
   return (
     <View style={styles.container}>
       <Results isLoading={loading} isError={error} />
@@ -287,9 +301,5 @@ const Homescreen = () => {
     </View>
   );
 };
-
-function handlePoweredPress() {
-  WebBrowser.openBrowserAsync('https://high.fi');
-}
 
 export default Homescreen;
