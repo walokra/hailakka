@@ -3,10 +3,17 @@
   "description": " High.fi client with Expo",
   "display": "standalone",
   "lang": "en",
-  "name": "highlakka",
-  "short_name": "highlakka",
+  "name": "hailakka",
+  "short_name": "hailakka",
   "start_url": "/?utm_source=web_app_manifest",
   "orientation": "portrait",
+  "related_applications": [
+    {
+      "platform": "itunes",
+      "id": "com.ruleoftech.hailakka"
+    }
+  ],
+  "prefer_related_applications": true,
   "icons": [
     {
       "src": "/pwa/chrome-icon/chrome-icon-144.png",
