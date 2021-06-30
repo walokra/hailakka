@@ -29,7 +29,7 @@
     "@react-navigation/stack": "^5.14.5",
     "expo": "^41.0.0",
     "expo-asset": "~8.3.1",
-    "expo-dark-mode-switch": "github:walokra/expo-dark-mode-switch#upgrade-to-expo-41",
+    "expo-dark-mode-switch": "github:walokra/expo-dark-mode-switch#v0.0.3",
     "expo-font": "~9.1.0",
     "expo-linking": "~2.2.3",
     "expo-splash-screen": "~0.10.2",
@@ -46,10 +46,10 @@
     "react-native-screens": "^3.4.0",
     "react-native-svg": "^12.1.1",
     "react-native-web": "^0.17.1",
+    "react-native-webview": "11.2.3",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
-    "redux-thunk": "^2.3.0",
-    "react-native-webview": "11.2.3"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
