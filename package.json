@@ -89,5 +89,8 @@
   "jest": {
     "preset": "jest-expo"
   },
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "lint-staged": "npm run lint --"
 }
