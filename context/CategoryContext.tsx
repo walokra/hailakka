@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import { createContext } from 'react';
 
 const DEFAULT_CONTEXT = {

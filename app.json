@@ -23,6 +23,15 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ruleoftech.hailakka",
       "buildNumber": "0.2.0"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }

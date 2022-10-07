@@ -30,10 +30,10 @@
 // }
 // }
 export type Category = {
+  depth: number,
+  highlight?: boolean,
+  htmlFilename: string,
+  sectionID: number | string,
+  selected?: boolean,
   title: string
-  sectionID: number
-  depth: number
-  htmlFilename: string
-  highlight: boolean
-  selected: boolean
 }

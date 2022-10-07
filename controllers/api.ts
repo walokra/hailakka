@@ -1,3 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // import { Platform } from 'react-native';
 
 // import { Language } from '../models/Language';
@@ -23,20 +28,16 @@ const API_KEY = '1234567890';
 // const proxy = Platform.OS === 'web' ? 'http://0.0.0.0:8080/' : '';
 const proxy = '';
 
-export const createApiEndpoint = (
-  domainToUse: string,
-  endpoint: string,
-): string => {
-  return `${proxy}https://${domainToUse}/${endpoint}/${HIGH_FI_API}?APIKEY=${API_KEY}`;
-};
+export const createApiEndpoint = (domainToUse: string, endpoint: string): string =>
+  `${proxy}https://${domainToUse}/${endpoint}/${HIGH_FI_API}?APIKEY=${API_KEY}`;
 
 export const init: RequestInit = {
-  method: 'GET',
   headers: {
     Accept: 'application/json',
     // FIXME: Can't send User-Agent to high.fi API due CORS
     // 'User-Agent': USER_AGENT,
   },
+  method: 'GET',
 };
 
 // export function load(source: Object, domainToUse: string, hideSections: [], onSuccess, onFailure) {
@@ -171,23 +172,26 @@ export const listCategories = async (
   genericNewsURLPart: string,
   latestName: string,
   useToRetrieveLists: string,
-) => {
+): Promise<Category[]> => {
   const categories = [];
   const popular = {
-    title: mostPopularName,
-    sectionID: 'top',
+    depth: 1,
     htmlFilename: 'top',
+    sectionID: 'top',
     selected: true,
-    depth: 1,
+    title: mostPopularName,
   };
+
   categories.push(popular);
+
   const latest = {
-    title: latestName,
-    sectionID: genericNewsURLPart,
-    htmlFilename: genericNewsURLPart,
-    selected: true,
     depth: 1,
+    htmlFilename: genericNewsURLPart,
+    sectionID: genericNewsURLPart,
+    selected: true,
+    title: latestName,
   };
+
   categories.push(latest);
 
   const url = `${createApiEndpoint(
@@ -204,18 +208,22 @@ export const listCategories = async (
 
     const items = data.responseData.categories;
 
+    // FIXME
     items.forEach((entry: Category) => {
       const item = {};
+
       for (const key in entry) {
         item[key] = entry[key];
       }
-      item['selected'] = false;
+
+      item.selected = false;
 
       categories.push(item);
     });
+
     return categories;
   } catch (error) {
     console.error(error);
-    throw Error('Fetching languages failed! ' + error.message);
+    throw Error(`Fetching languages failed! ${(error as any).message}`);
   }
 };

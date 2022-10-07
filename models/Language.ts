@@ -27,12 +27,12 @@
 // }
 // }
 export type Language = {
-  language: string
-  country: string
-  domainToUse: string
-  languageCode: string
-  mostPopularName: string
+  country: string,
+  domainToUse: string,
+  genericNewsURLPart: string,
+  language: string,
+  languageCode: string,
   latestName: string
+  mostPopularName: string,
   useToRetrieveLists: string
-  genericNewsURLPart: string
 }

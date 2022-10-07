@@ -1,141 +1,137 @@
-import React, { useState, useEffect } from 'react';
-import { Provider, useSelector } from 'react-redux';
-import {
-  StatusBar,
-  StyleSheet,
-  View,
-  Text,
-  ActivityIndicator,
-  Dimensions,
-} from 'react-native';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from '@react-navigation/native';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react/function-component-definition */
+/* eslint-disable react/no-children-prop */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable react/forbid-component-props */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/jsx-no-constructed-context-values */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { registerRootComponent } from 'expo';
+import { StatusBar } from 'expo-status-bar';
+import React, { useContext, useEffect, useState } from 'react';
 import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-} from '@react-navigation/drawer';
-import { AppearanceProvider, useColorScheme } from 'react-native-appearance';
-
-import useCachedResources from './hooks/useCachedResources';
-import { listCategories } from './controllers/api';
-
+  ActivityIndicator,
+  // Dimensions,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Header from './components/Header';
-
+import { CategoryContext } from './context/CategoryContext';
+import ThemeProvider, { ThemeContext } from './context/ThemeProvider';
+import { listCategories } from './controllers/api';
+import useCachedResources from './hooks/useCachedResources';
+import { Category } from './models/Category';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import WebViewScreen from './screens/WebViewScreen';
 
-import store from './store';
+const CustomDrawerContent = (props: any) => (
+  <DrawerContentScrollView {...props}>
+    <Header {...props} />
 
-import { CategoryContext } from './context/CategoryContext';
-
-import { Category } from './models/Category';
-
-const CustomDrawerContent = (props) => {
-  return (
-    <DrawerContentScrollView {...props}>
-      <Header {...props} />
-
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-};
+    <DrawerItemList {...props} />
+  </DrawerContentScrollView>
+);
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-const Root = (props): JSX.Element => {
-  const { title, htmlFilename } = props.item;
+const Root = (props: any): JSX.Element => {
+  const { htmlFilename, title } = props.item;
 
   return (
     <CategoryContext.Provider value={{ htmlFilename, title }}>
       <Stack.Navigator>
         <Stack.Screen
-          name="Highlakka"
           component={HomeScreen}
+          name="Highlakka"
           options={{
             title: `Highlakka: ${title}`,
           }}
         />
         <Stack.Screen
-          name="Settings"
           component={SettingsScreen}
+          name="Settings"
           options={{
             title: `Settings`,
           }}
         />
         <Stack.Screen
-          name="WebView"
           component={WebViewScreen}
-          options={({ route }) => ({ title: route.params.title })}
+          name="WebView"
+          options={({ route }) => ({ title: (route.params as any).title })}
         />
       </Stack.Navigator>
     </CategoryContext.Provider>
   );
 };
 
-function EmptyScreen() {
-  return (
-    <View
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
-    ></View>
-  );
-}
+const EmptyScreen = () => <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center' }} />;
 
-function App() {
+const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
-  const dimensions = Dimensions.get('window');
-  const isLargeScreen = dimensions.width >= 768;
+  // const dimensions = Dimensions.get('window');
+  // const isLargeScreen = dimensions.width >= 768;
 
-  const darkModeEnabled = useSelector(
-    (state) => state.Settings.darkModeEnabled,
-  );
-  const [categories, setCategories] = useState([]);
+  const theme = useContext(ThemeContext);
+  const darkModeEnabled = theme.state.colorScheme === 'dark';
+
+  // const HaikalaTheme =
+  //   theme.state.colorScheme === 'dark'
+  //     ? {
+  //         ...DarkTheme,
+  //         colors: {
+  //           ...DarkTheme.colors,
+  //           // primary: 'rgb(255, 45, 85)',
+  //         },
+  //         dark: true,
+  //       }
+  //     : {
+  //         ...DefaultTheme,
+  //         colors: {
+  //           ...DarkTheme.colors,
+  //           // primary: 'rgb(255, 45, 85)',
+  //         },
+  //         dark: false,
+  //       };
+
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const themeStatusBarStyle =
-    colorScheme === 'light'
-      ? darkModeEnabled
-        ? 'dark-content'
-        : 'light-content'
-      : !darkModeEnabled
-      ? 'light-content'
-      : 'dark-content';
+    colorScheme === 'light' ? (darkModeEnabled ? 'dark' : 'light') : !darkModeEnabled ? 'light' : 'dark';
 
   useEffect(() => {
     // const languages = listLanguages("high.fi")
     const domainToUse = 'fi.high.fi';
-    listCategories(
-      domainToUse,
-      'Suosituimmat',
-      'uutiset',
-      'Uusimmat',
-      'finnish',
-    )
-      .then((categories) => {
-        setCategories(categories);
-        setLoading(false);
-        setError(false);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-        setError(true);
-      })
-      .finally(() => setLoading(false));
+
+    const fetchCategories = async () => {
+      const cat = await listCategories(domainToUse, 'Suosituimmat', 'uutiset', 'Uusimmat', 'finnish');
+
+      setCategories(cat);
+      setLoading(false);
+      setError(false);
+    };
+
+    fetchCategories().catch((e) => {
+      console.error(e);
+      setLoading(false);
+      setError(true);
+    });
   }, []);
 
   if (!isLoadingComplete) {
     return null;
   }
+
   if (loading) {
     return (
       <SafeAreaProvider>
@@ -170,50 +166,50 @@ function App() {
         }
       >
         <View style={[styles.container]}>
-          <StatusBar barStyle={themeStatusBarStyle} />
+          <StatusBar style={themeStatusBarStyle} />
 
           <Drawer.Navigator
-            drawerType={isLargeScreen ? 'permanent' : 'back'}
-            drawerStyle={isLargeScreen ? null : { width: '100%' }}
-            overlayColor="transparent"
             drawerContent={CustomDrawerContent}
+            // drawerStyle={isLargeScreen ? null : { width: '100%' }}
+            // drawerType={isLargeScreen ? 'permanent' : 'back'}
             initialRouteName="Root"
+            // overlayColor="transparent"
           >
             {categories && categories.length > 0 ? (
-              categories.map((item: Category, index) => (
+              categories.map((item: Category) => (
                 <Drawer.Screen
+                  children={() => <Root item={item} />}
                   key={item.sectionID}
                   name={`${item.title}_${item.sectionID}`}
-                  children={() => <Root item={item} />}
                   options={{ drawerLabel: item.title }}
                 />
               ))
             ) : (
-              <Drawer.Screen name="empty" component={EmptyScreen} />
+              <Drawer.Screen component={EmptyScreen} name="empty" />
             )}
           </Drawer.Navigator>
         </View>
       </NavigationContainer>
     </SafeAreaProvider>
   );
-}
+};
 
 export default function AppContainer(): JSX.Element {
   return (
-    <AppearanceProvider>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </AppearanceProvider>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
+    flex: 1,
   },
   header: {
     height: 50,
   },
 });
+
+registerRootComponent(App);

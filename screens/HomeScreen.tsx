@@ -1,72 +1,46 @@
-import React, { useState, useEffect, useContext } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
-// import * as WebBrowser from 'expo-web-browser';
-import { ScrollView } from 'react-native-gesture-handler';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable no-shadow */
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/no-unstable-nested-components */
 import { useTheme } from '@react-navigation/native';
+import * as WebBrowser from 'expo-web-browser';
 import { DateTime } from 'luxon';
-import { createApiEndpoint, init } from '../controllers/api';
-import { CategoryContext } from '../context/CategoryContext';
-
-import { timeSince, getOrder } from '../components/utils';
+import React, { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import SectionHeader from '../components/SectionHeader';
-
+import { getOrder, timeSince } from '../components/utils';
+import { CategoryContext } from '../context/CategoryContext';
+import { createApiEndpoint, init } from '../controllers/api';
 import { Entry } from '../models/Entry';
 
 const styles = StyleSheet.create({
+  articleContainer: {
+    alignItems: 'baseline',
+    flex: 1,
+  },
   container: {
     flex: 1,
   },
   contentContainer: {
     alignItems: 'baseline',
   },
-  articleContainer: {
-    flex: 1,
-    alignItems: 'baseline',
-  },
-  footerContainer: {
-    position: 'absolute',
-    bottom: 5,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    // backgroundColor: '#fbfbfb',
-  },
-  footerInfoText: {
-    fontSize: 10,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
+  description: {
+    fontSize: 14,
+    marginTop: 3,
+    minWidth: 0,
   },
   entryContainer: {
-    paddingVertical: 5,
+    alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
     paddingHorizontal: 10,
     paddingTop: 10,
-  },
-  entryImage: {
-    alignItems: 'flex-start',
-    width: 100,
-    height: 100,
+    paddingVertical: 5,
   },
   entryContent: {
     flex: 1,
@@ -75,27 +49,51 @@ const styles = StyleSheet.create({
     // borderColor: 'red',
     // borderWidth: 1,
   },
-  title: {
-    fontSize: 15,
-    minWidth: 0,
+  entryImage: {
+    alignItems: 'flex-start',
+    height: 100,
+    width: 100,
+  },
+  footerContainer: {
+    bottom: 5,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    ...Platform.select({
+      android: {
+        elevation: 20,
+      },
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: { height: -3, width: 0 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+      },
+    }),
+    alignItems: 'center',
+    // backgroundColor: '#fbfbfb',
+  },
+  footerInfoText: {
+    color: 'rgba(96,100,109, 1)',
+    fontSize: 10,
+    textAlign: 'center',
+  },
+  linkText: {
+    color: '#2e78b7',
+    fontSize: 9,
   },
   source: {
     fontSize: 12,
   },
-  description: {
+  title: {
+    fontSize: 15,
     minWidth: 0,
-    fontSize: 14,
-    marginTop: 3,
-  },
-  linkText: {
-    fontSize: 9,
-    color: '#2e78b7',
   },
 });
 
 interface Props {
-  isLoading: boolean;
   isError: boolean;
+  isLoading: boolean;
 }
 
 interface ISections {
@@ -112,26 +110,24 @@ const Homescreen = ({ navigation }) => {
 
   // 'https://fi.high.fi/uutiset/json-private?APIKEY=1234567890';
   useEffect(() => {
-    const apiRequest = new Request(
-      createApiEndpoint('fi.high.fi', `${htmlFilename}`),
-      init,
-    );
+    const apiRequest = new Request(createApiEndpoint('fi.high.fi', `${htmlFilename}`), init);
+
     fetch(apiRequest)
-      .then(async (response) => {
-        return response.json();
-      })
+      .then(async (response) => response.json())
       .then((data): [Entry] => {
         // console.log(data)
         const items = data.responseData.feed.entries;
+
         return items;
       })
-      .then(async (items) => {
+      .then((items) => {
         setSections([]);
 
         // Top items are not grouped by time but by ranking
         if (htmlFilename === 'top') {
           let i = 0;
           let range = ' 1 ..10';
+
           items.forEach((entry: Entry) => {
             if (i < 10) {
               range = ' 1 ..10';
@@ -156,6 +152,7 @@ const Homescreen = ({ navigation }) => {
             } else {
               sections[range].push(entry);
             }
+
             i += 1;
           });
 
@@ -169,11 +166,9 @@ const Homescreen = ({ navigation }) => {
           items.map((item) => {
             const article = {
               ...item,
-              timeSince: timeSince(item.publishedDateJS),
               orderNo: getOrder(item.publishedDateJS),
-              publishedDate: DateTime.fromISO(item.publishedDateJS)
-                .toLocal()
-                .toFormat('ccc d.m.yyyy HH:mm'),
+              publishedDate: DateTime.fromISO(item.publishedDateJS).toLocal().toFormat('ccc d.m.yyyy HH:mm'),
+              timeSince: timeSince(item.publishedDateJS),
             };
 
             newsEntries.push(article);
@@ -231,50 +226,37 @@ const Homescreen = ({ navigation }) => {
 
     return (
       <ScrollView
-        style={[styles.container, { backgroundColor: colors.card }]}
         contentContainerStyle={[styles.contentContainer]}
+        style={[styles.container, { backgroundColor: colors.card }]}
       >
-        {Object.keys(sections).map((section, index) => {
-          return (
-            <View key={index} style={styles.articleContainer}>
-              <SectionHeader section={section} colors={colors} />
-              {sections[section].map((article: Entry, index) => {
-                // console.log({ article });
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      navigation.navigate('WebView', {
-                        link: article.link,
-                        title: article.title,
-                      });
-                      //WebBrowser.openBrowserAsync(article.link);
-                    }}
-                    style={styles.entryContainer}
-                  >
-                    <Image
-                      source={{ uri: article.picture }}
-                      style={[styles.entryImage]}
-                    />
-                    <View style={styles.entryContent}>
-                      <Text style={[styles.title, { color: colors.text }]}>
-                        {article.title}
-                      </Text>
-                      <Text style={[styles.source, { color: colors.text }]}>
-                        {article.author} - {article.publishedDate}
-                      </Text>
-                      <Text
-                        style={[styles.description, { color: colors.text }]}
-                      >
-                        {article.shortDescription}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          );
-        })}
+        {Object.keys(sections).map((section, index) => (
+          <View key={index} style={styles.articleContainer}>
+            <SectionHeader colors={colors} section={section} />
+            {sections[section].map((article: Entry, index) => (
+              // console.log({ article });
+              <TouchableOpacity
+                key={index}
+                onPress={() => {
+                  navigation.navigate('WebView', {
+                    link: article.link,
+                    title: article.title,
+                  });
+                  WebBrowser.openBrowserAsync(article.link).catch(console.error);
+                }}
+                style={styles.entryContainer}
+              >
+                <Image source={{ uri: article.picture }} style={[styles.entryImage]} />
+                <View style={styles.entryContent}>
+                  <Text style={[styles.title, { color: colors.text }]}>{article.title}</Text>
+                  <Text style={[styles.source, { color: colors.text }]}>
+                    {article.author} - {article.publishedDate}
+                  </Text>
+                  <Text style={[styles.description, { color: colors.text }]}>{article.shortDescription}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
       </ScrollView>
     );
   };
@@ -289,7 +271,7 @@ const Homescreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Results isLoading={loading} isError={error} />
+      <Results isError={error} isLoading={loading} />
 
       <View style={[styles.footerContainer, { backgroundColor: colors.card }]}>
         <TouchableOpacity onPress={handlePoweredPress}>
