@@ -4,10 +4,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 const SectionHeader = ({ colors, section }) => (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>{section}</Text>
-    </View>
-  );
+  <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <Text style={[styles.title, { color: colors.text }]}>{section}</Text>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

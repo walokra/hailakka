@@ -26,6 +26,7 @@ const Header = (props): JSX.Element => {
           onChange={(value) => {
             theme.setState(value === true ? { colorScheme: 'dark' } : { colorScheme: 'light' });
           }}
+          testID="theme-switch"
           value={theme.state.colorScheme === 'dark'}
         />
       </View>

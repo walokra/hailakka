@@ -6,6 +6,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +18,7 @@ import {
   // Dimensions,
   StyleSheet,
   Text,
+  // TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
@@ -42,6 +44,27 @@ const CustomDrawerContent = (props: any) => (
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+/* </Icon>
+  <View>
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigation.toggleDrawer();
+      }}
+    >
+      <Ionicons name="menu" size={35} />
+    </TouchableOpacity>
+  </View> */
+
+const DrawerIcon = (navigation: any) => (
+  <Ionicons
+    color="blue"
+    name="menu"
+    onPress={() => navigation.navigation.toggleDrawer()}
+    size={30}
+    testID="drawer-icon"
+  />
+);
+
 const Root = (props: any): JSX.Element => {
   const { htmlFilename, title } = props.item;
 
@@ -51,8 +74,11 @@ const Root = (props: any): JSX.Element => {
         <Stack.Screen
           component={HomeScreen}
           name="Highlakka"
+          // options={{
+          //   title: `Highlakka: ${title}`,
+          // }}
           options={{
-            title: `Highlakka: ${title}`,
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -82,25 +108,6 @@ const App = () => {
 
   const theme = useContext(ThemeContext);
   const darkModeEnabled = theme.state.colorScheme === 'dark';
-
-  // const HaikalaTheme =
-  //   theme.state.colorScheme === 'dark'
-  //     ? {
-  //         ...DarkTheme,
-  //         colors: {
-  //           ...DarkTheme.colors,
-  //           // primary: 'rgb(255, 45, 85)',
-  //         },
-  //         dark: true,
-  //       }
-  //     : {
-  //         ...DefaultTheme,
-  //         colors: {
-  //           ...DarkTheme.colors,
-  //           // primary: 'rgb(255, 45, 85)',
-  //         },
-  //         dark: false,
-  //       };
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -165,7 +172,7 @@ const App = () => {
             : DarkTheme
         }
       >
-        <View style={[styles.container]}>
+        <View style={[styles.container]} testID="navigation-container-view">
           <StatusBar style={themeStatusBarStyle} />
 
           <Drawer.Navigator
@@ -174,6 +181,10 @@ const App = () => {
             // drawerType={isLargeScreen ? 'permanent' : 'back'}
             initialRouteName="Root"
             // overlayColor="transparent"
+            screenOptions={({ navigation }) => ({
+              // eslint-disable-next-line react/no-unstable-nested-components
+              headerLeft: () => <DrawerIcon navigation={navigation} />,
+            })}
           >
             {categories && categories.length > 0 ? (
               categories.map((item: Category) => (
@@ -181,7 +192,7 @@ const App = () => {
                   children={() => <Root item={item} />}
                   key={item.sectionID}
                   name={`${item.title}_${item.sectionID}`}
-                  options={{ drawerLabel: item.title }}
+                  options={{ drawerLabel: item.title, headerTitle: item.title }}
                 />
               ))
             ) : (
