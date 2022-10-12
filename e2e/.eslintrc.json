@@ -1,0 +1,12 @@
+{
+    "parserOptions": {
+        "project": ["./tsconfig.json"]
+    },
+    "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "import/no-extraneous-dependencies": "off",
+        "jest/valid-expect": "off"
+    }
+}

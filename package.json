@@ -10,18 +10,32 @@
     "expo",
     "react native"
   ],
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "eslint \"**/*.{ts,tsx}\" --quiet --fix",
-    "prepare": "husky install"
+    "data": "ts-node src/data/generate",
+    "prepare": "husky install",
+    "e2e:ios": "npm run e2e:ios:build && npm run e2e:ios:run",
+    "e2e:ios:build": "detox build --configuration ios.development",
+    "e2e:ios:refresh": "npm run e2e:ios:build && npm run e2e:ios:run -- --updateSnapshot",
+    "e2e:ios:run": "detox test --configuration ios.development",
+    "e2e:android": "npm run e2e:android:build && npm run e2e:android:run",
+    "e2e:android:build": "detox build --configuration android.development",
+    "e2e:android:refresh": "npm run e2e:android:build && npm run e2e:android:run -- --updateSnapshot",
+    "e2e:android:reverse": "adb reverse tcp:8081 tcp:8081",
+    "e2e:android:run": "concurrently --passthrough-arguments 'npx react-native start' 'npm run e2e:android:test -- {@}' --",
+    "e2e:android:test": "detox test --configuration android.development"
+  },
+  "detox": {
+    "extends": "./e2e/detox.config"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@expo/webpack-config": "^0.17.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/drawer": "^6.5.0",
     "@react-navigation/native": "^6.0.13",
@@ -29,7 +43,7 @@
     "expo": "~46.0.13",
     "expo-dark-mode-switch": "^0.0.2",
     "expo-font": "^10.2.1",
-    "expo-splash-screen": "^0.16.2",
+    "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "expo-web-browser": "^11.0.0",
     "luxon": "^3.0.4",
@@ -42,15 +56,19 @@
     "react-native-screens": "^3.18.0",
     "react-native-web": "~0.18.7",
     "react-native-webview": "^11.23.1",
-    "@expo/webpack-config": "^0.17.0"
+    "react-native-svg": "12.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@config-plugins/detox": "^3.0.0",
+    "@types/jest": "^29.1.2",
+    "@types/jest-image-snapshot": "^5.1.0",
     "@types/luxon": "^3.0.1",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.69.1",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
+    "detox": "^19.12.5",
     "eslint": "^8.24.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -68,10 +86,14 @@
     "eslint-plugin-sort-keys-fix": "^1.1.2",
     "eslint-plugin-typescript-sort-keys": "^2.1.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.12.0",
+    "expo-detox-hook": "^1.0.10",
     "husky": "^8.0.1",
     "jest-expo": "^46.0.1",
+    "jest-image-snapshot": "^5.2.0",
     "lint-staged": "^13.0.3",
+    "metro-react-native-babel-preset": "^0.73.1",
     "prettier": "^2.7.1",
+    "ts-jest": "^28.0.8",
     "typescript": "~4.3.5"
   },
   "prettier": {

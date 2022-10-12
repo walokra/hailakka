@@ -5,6 +5,6 @@ module.exports = function (api) {
     plugins: [
       'react-native-reanimated/plugin'
     ],
-    presets: ['babel-preset-expo']
+    presets: ['babel-preset-expo', 'module:metro-react-native-babel-preset']
   };
 };
