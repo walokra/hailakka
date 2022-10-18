@@ -19,16 +19,19 @@
     "lint": "eslint \"**/*.{ts,tsx}\" --quiet --fix",
     "data": "ts-node src/data/generate",
     "prepare": "husky install",
-    "e2e:ios": "npm run e2e:ios:build && npm run e2e:ios:run",
-    "e2e:ios:build": "detox build --configuration ios.development",
+    "e2e:ios": "export FORCE_BUNDLING=true && npm run e2e:ios:build && npm run e2e:ios:run",
+    "e2e:ios:build": "export FORCE_BUNDLING=true && detox build --configuration ios.development",
     "e2e:ios:refresh": "npm run e2e:ios:build && npm run e2e:ios:run -- --updateSnapshot",
     "e2e:ios:run": "detox test --configuration ios.development",
     "e2e:android": "npm run e2e:android:build && npm run e2e:android:run",
-    "e2e:android:build": "detox build --configuration android.development",
+		"e2e:android:debug": "npm run e2e:android:build:debug && npm run e2e:android:run:debug",
+    "e2e:android:build": "export FORCE_BUNDLING=true && detox build --configuration android.release",
+		"e2e:android:build:debug": "detox build --configuration android.debug",
     "e2e:android:refresh": "npm run e2e:android:build && npm run e2e:android:run -- --updateSnapshot",
     "e2e:android:reverse": "adb reverse tcp:8081 tcp:8081",
-    "e2e:android:run": "concurrently --passthrough-arguments 'npx react-native start' 'npm run e2e:android:test -- {@}' --",
-    "e2e:android:test": "detox test --configuration android.development"
+		"e2e:android:run": "detox test --configuration android.release",
+    "e2e:android:run:debug": "concurrently --passthrough-arguments 'npx react-native start' 'npm run e2e:android:test:debug -- {@}' --",
+    "e2e:android:test:debug": "detox test --configuration android.debug"
   },
   "detox": {
     "extends": "./e2e/detox.config"
@@ -54,9 +57,9 @@
     "react-native-reanimated": "~2.9.1",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-screens": "^3.18.0",
+    "react-native-svg": "12.1.1",
     "react-native-web": "~0.18.7",
-    "react-native-webview": "^11.23.1",
-    "react-native-svg": "12.1.1"
+    "react-native-webview": "^11.23.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -68,6 +71,7 @@
     "@types/react-native": "~0.69.1",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
+    "concurrently": "^7.4.0",
     "detox": "^19.12.5",
     "eslint": "^8.24.0",
     "eslint-config-airbnb": "^19.0.4",
@@ -86,12 +90,10 @@
     "eslint-plugin-sort-keys-fix": "^1.1.2",
     "eslint-plugin-typescript-sort-keys": "^2.1.0",
     "eslint-plugin-you-dont-need-lodash-underscore": "^6.12.0",
-    "expo-detox-hook": "^1.0.10",
     "husky": "^8.0.1",
     "jest-expo": "^46.0.1",
     "jest-image-snapshot": "^5.2.0",
     "lint-staged": "^13.0.3",
-    "metro-react-native-babel-preset": "^0.73.1",
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.8",
     "typescript": "~4.3.5"

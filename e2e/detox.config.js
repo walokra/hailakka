@@ -2,6 +2,7 @@ module.exports = {
   apps: {
     'android.development': {
       binaryPath: './android/app/build/outputs/apk/release/app-development.apk',
+      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..',
       type: 'android.apk',
     },
     'ios.development': {
@@ -9,6 +10,21 @@ module.exports = {
       build:
         'xcodebuild -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
       type: 'ios.app',
+    },
+  },
+  artifacts: {
+    plugins: {
+      screenshot: {
+        enabled: false,
+        keepOnlyFailedTestsArtifacts: false,
+        shouldTakeAutomaticSnapshots: false,
+        takeWhen: {
+          appNotReady: false,
+          testDone: false,
+          testStart: false,
+        },
+      },
+      uiHierarchy: 'disabled',
     },
   },
   behavior: {
@@ -44,19 +60,4 @@ module.exports = {
   runnerConfig: './e2e/config.json',
   skipLegacyWorkersInjection: true,
   testRunner: 'jest',
-  artifacts: {
-    plugins: {
-      screenshot: {
-        enabled: false,
-        keepOnlyFailedTestsArtifacts: false,
-        shouldTakeAutomaticSnapshots: false,
-        takeWhen: {
-          appNotReady: false,
-          testDone: false,
-          testStart: false,
-        },
-      },
-      uiHierarchy: 'disabled',
-    },
-  },
 };
