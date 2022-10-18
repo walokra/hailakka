@@ -1,9 +1,10 @@
-import { by, element, expect } from 'detox';
+import { by, device, element, expect } from 'detox';
 
 const jestExpect = (global as any).expect;
 
 describe('Sidebar', () => {
   it('should show sidebar after tap', async () => {
+    await expect(element(by.id('drawer-icon'))).toBeVisible();
     await element(by.id('drawer-icon')).tap();
     await expect(element(by.text('Highlakka'))).toBeVisible();
 
@@ -11,7 +12,14 @@ describe('Sidebar', () => {
   });
 
   it('should switch dark theme after tap', async () => {
-    await element(by.id('theme-switch')).tap();
+    if (device.getPlatform() === 'ios') {
+      await expect(element(by.id('theme-switch'))).toBeVisible();
+      await element(by.id('theme-switch')).tap();
+    } else {
+      await expect(element(by.id('theme-switch-container-view'))).toBeVisible();
+      await element(by.id('theme-switch').withAncestor(by.id('theme-switch-container-view'))).tap();
+    }
+
     await expect(element(by.text('Highlakka'))).toBeVisible();
 
     await jestExpect('Sidebar Light Screen').toMatchImageSnapshot();

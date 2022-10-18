@@ -1,8 +1,15 @@
 module.exports = {
   apps: {
-    'android.development': {
-      binaryPath: './android/app/build/outputs/apk/release/app-development.apk',
-      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..',
+    'android.debug': {
+      binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
+      build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
+      testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
+      type: 'android.apk',
+    },
+    'android.release': {
+      binaryPath: './android/app/build/outputs/apk/release/app-release.apk',
+      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..',
+      testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
     'ios.development': {
@@ -33,8 +40,12 @@ module.exports = {
     },
   },
   configurations: {
-    'android.development': {
-      app: 'android.development',
+    'android.debug': {
+      app: 'android.debug',
+      device: 'emulator',
+    },
+    'android.release': {
+      app: 'android.release',
       device: 'emulator',
     },
     'ios.development': {
@@ -45,7 +56,7 @@ module.exports = {
   devices: {
     emulator: {
       device: {
-        avdName: 'Pixel5_API_31',
+        avdName: 'Pixel_5_API_31',
       },
       type: 'android.emulator',
       // utilBinaryPaths: ['./cache/test-butler-app.apk'],
