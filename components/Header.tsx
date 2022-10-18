@@ -21,7 +21,7 @@ const Header = (props): JSX.Element => {
       <View style={styles.titleWrapper}>
         <Text style={[styles.switchTitleStyle, { color: colors.text }]}>Highlakka</Text>
       </View>
-      <View style={styles.switchWrapperStyle}>
+      <View style={styles.switchWrapperStyle} testID="theme-switch-container-view">
         <Switch
           onChange={(value) => {
             theme.setState(value === true ? { colorScheme: 'dark' } : { colorScheme: 'light' });

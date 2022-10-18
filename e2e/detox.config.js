@@ -1,7 +1,15 @@
 module.exports = {
   apps: {
-    'android.development': {
-      binaryPath: './android/app/build/outputs/apk/release/app-development.apk',
+    'android.debug': {
+      binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
+      build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
+      testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
+      type: 'android.apk',
+    },
+    'android.release': {
+      binaryPath: './android/app/build/outputs/apk/release/app-release.apk',
+      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..',
+      testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
     'ios.development': {
@@ -11,39 +19,6 @@ module.exports = {
       type: 'ios.app',
     },
   },
-  behavior: {
-    init: {
-      exposeGlobals: false,
-    },
-  },
-  configurations: {
-    'android.development': {
-      app: 'android.development',
-      device: 'emulator',
-    },
-    'ios.development': {
-      app: 'ios.development',
-      device: 'simulator',
-    },
-  },
-  devices: {
-    emulator: {
-      device: {
-        avdName: 'Pixel5_API_31',
-      },
-      type: 'android.emulator',
-      // utilBinaryPaths: ['./cache/test-butler-app.apk'],
-    },
-    simulator: {
-      device: {
-        type: 'iPhone 14 Pro',
-      },
-      type: 'ios.simulator',
-    },
-  },
-  runnerConfig: './e2e/config.json',
-  skipLegacyWorkersInjection: true,
-  testRunner: 'jest',
   artifacts: {
     plugins: {
       screenshot: {
@@ -59,4 +34,41 @@ module.exports = {
       uiHierarchy: 'disabled',
     },
   },
+  behavior: {
+    init: {
+      exposeGlobals: false,
+    },
+  },
+  configurations: {
+    'android.debug': {
+      app: 'android.debug',
+      device: 'emulator',
+    },
+    'android.release': {
+      app: 'android.release',
+      device: 'emulator',
+    },
+    'ios.development': {
+      app: 'ios.development',
+      device: 'simulator',
+    },
+  },
+  devices: {
+    emulator: {
+      device: {
+        avdName: 'Pixel_5_API_31',
+      },
+      type: 'android.emulator',
+      // utilBinaryPaths: ['./cache/test-butler-app.apk'],
+    },
+    simulator: {
+      device: {
+        type: 'iPhone 14 Pro',
+      },
+      type: 'ios.simulator',
+    },
+  },
+  runnerConfig: './e2e/config.json',
+  skipLegacyWorkersInjection: true,
+  testRunner: 'jest',
 };

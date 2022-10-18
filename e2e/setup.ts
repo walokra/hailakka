@@ -50,16 +50,13 @@ beforeAll(async () => {
   const language = 'en';
   const locale = 'en-US';
 
+	await setDemoMode();
+
   await device.launchApp({
     languageAndLocale: {
       language,
       locale,
     },
-    // newInstance: true,
+    newInstance: true,
   });
-});
-
-beforeEach(async () => {
-	await device.reloadReactNative();
-  await setDemoMode();
 });
