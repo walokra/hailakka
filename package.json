@@ -24,14 +24,9 @@
     "e2e:ios:refresh": "npm run e2e:ios:build && npm run e2e:ios:run -- --updateSnapshot",
     "e2e:ios:run": "detox test --configuration ios.development",
     "e2e:android": "npm run e2e:android:build && npm run e2e:android:run",
-		"e2e:android:debug": "npm run e2e:android:build:debug && npm run e2e:android:run:debug",
     "e2e:android:build": "export FORCE_BUNDLING=true && detox build --configuration android.release",
-		"e2e:android:build:debug": "detox build --configuration android.debug",
     "e2e:android:refresh": "npm run e2e:android:build && npm run e2e:android:run -- --updateSnapshot",
-    "e2e:android:reverse": "adb reverse tcp:8081 tcp:8081",
-		"e2e:android:run": "detox test --configuration android.release",
-    "e2e:android:run:debug": "concurrently --passthrough-arguments 'npx react-native start' 'npm run e2e:android:test:debug -- {@}' --",
-    "e2e:android:test:debug": "detox test --configuration android.debug"
+    "e2e:android:run": "detox test --configuration android.release"
   },
   "detox": {
     "extends": "./e2e/detox.config"

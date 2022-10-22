@@ -1,0 +1,56 @@
+name: Android
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-12
+    timeout-minutes: 15
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+        cache: 'npm'
+
+    - name: Set up JDK 11, Use specific Java version for sdkmanager to work
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        architecture: 'x64'
+
+    - name: Download Android Emulator Image
+      run: |
+        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
+        echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel 5" -k 'system-images;android-31;google_apis;x86'
+        $ANDROID_HOME/emulator/emulator -list-avds
+    - name: Install node_modules
+      run: |
+        yarn install --frozen-lockfile
+
+    - name: Build for detox
+      run: |
+        npm run e2e:android:build
+    - name: Android Emulator
+      timeout-minutes: 10
+      continue-on-error: true
+      run: |
+        echo "Starting emulator"
+        nohup $ANDROID_HOME/emulator/emulator -avd emu -no-audio -no-snapshot -no-window &
+        $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
+        $ANDROID_HOME/platform-tools/adb devices
+        echo "Emulator started"
+    - name: Android Detox
+      run: npm start & npm run e2e:android:run
+
+    - name: Store Detox artifacts on test failure
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: detox-artifacts
+        path: artifacts # Default path for Detox artifacts
