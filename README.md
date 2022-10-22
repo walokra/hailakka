@@ -1,7 +1,9 @@
+[![e2e: iOS](https://github.com/walokra/hailakka/actions/workflows/ios.yml/badge.svg)](https://github.com/walokra/hailakka/actions/workflows/ios.yml)
+
 # Hailakka
 
-News reader client for High.fi done with (Expo)[https://expo.io/].
-For native clients see: Highkara for iOS.
+News reader client for High.fi done with [Expo](https://expo.io/).
+For native clients see: [Highkara for iOS](https://apps.apple.com/fi/app/highkara-uutislukija/id1035170336).
 
 ## Development
 
@@ -37,6 +39,17 @@ Export Expo project configuration
 
 ```
 npx expo prebuild --platform ios
+```
+
+Change Java version to 11
+
+```
+brew reinstall asdf
+asdf plugin add java
+asdf list-all java
+asdf install java zulu-11.60.19
+asdf global java zulu-11.60.19
+asdf local java zulu-11.60.19
 ```
 
 Run tests
