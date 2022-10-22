@@ -13,7 +13,7 @@ module.exports = {
       type: 'android.apk',
     },
     'ios.ci.release': {
-      binaryPath: './ios/build/Build/Products/Debug-iphonesimulator/hailakka.app',
+      binaryPath: './ios/build/Build/Products/Release-iphonesimulator/hailakka.app',
       build:
         'set -o pipefail && xcodebuild -quiet -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Release -sdk iphonesimulator -derivedDataPath ios/build | xcbeautify --quieter',
       type: 'ios.app',
