@@ -21,6 +21,8 @@
     "prepare": "husky install",
     "e2e:ios": "export FORCE_BUNDLING=true && npm run e2e:ios:build && npm run e2e:ios:run",
     "e2e:ios:build": "export FORCE_BUNDLING=true && detox build --configuration ios.development",
+		"e2e:ios:ci:build": "export FORCE_BUNDLING=true && detox build --configuration ios.ci",
+		"e2e:ios:ci:run": "detox test --configuration ios.ci",
     "e2e:ios:refresh": "npm run e2e:ios:build && npm run e2e:ios:run -- --updateSnapshot",
     "e2e:ios:run": "detox test --configuration ios.development",
     "e2e:android": "npm run e2e:android:build && npm run e2e:android:run",

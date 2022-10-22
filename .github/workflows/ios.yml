@@ -43,5 +43,6 @@ jobs:
         cd ios && pod install && cd ..
     - run: brew tap wix/brew
     - run: brew install applesimutils
-    - run: npm run e2e:ios:build
-    - run: npm run e2e:ios:run --cleanup
+    - run: brew install xcbeautify
+    - run: npm run e2e:ios:ci:build
+    - run: npm run e2e:ios:ci:run --cleanup

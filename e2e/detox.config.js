@@ -12,16 +12,22 @@ module.exports = {
       testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
+    'ios.ci.release': {
+      binaryPath: './ios/build/Build/Products/Debug-iphonesimulator/hailakka.app',
+      build:
+        'set -o pipefail && xcodebuild -quiet -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Release -sdk iphonesimulator -derivedDataPath ios/build | xcbeautify --quieter',
+      type: 'ios.app',
+    },
     'ios.development': {
       binaryPath: './ios/build/Build/Products/Debug-iphonesimulator/hailakka.app',
       build:
-        'xcodebuild -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -quiet -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
       type: 'ios.app',
     },
   },
   artifacts: {
     plugins: {
-			enabled: true,
+      enabled: true,
       log: { enabled: true },
       screenshot: {
         keepOnlyFailedTestsArtifacts: true,
@@ -47,6 +53,10 @@ module.exports = {
     'android.release': {
       app: 'android.release',
       device: 'emulator',
+    },
+    'ios.ci': {
+      app: 'ios.ci.release',
+      device: 'simulator',
     },
     'ios.development': {
       app: 'ios.development',
