@@ -21,17 +21,19 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '11'
-        distribution: 'adopt'
-        architecture: 'x64'
+        distribution: 'zulu'
+        # architecture: 'x64'
+    - name: Validate Gradle wrapper
+      uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
     - name: Download Android Emulator Image
       run: |
-        echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
-        echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name emu --device "Pixel 5" -k 'system-images;android-31;google_apis;x86'
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "system-images;android-29;google_apis;x86"
+        echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd --force --name emu --device "Pixel 5" -k 'system-images;android-31;google_apis;x86'
         $ANDROID_HOME/emulator/emulator -list-avds
     - name: Install node_modules
       run: |
-        yarn install --frozen-lockfile
+        npm install
 
     - name: Build for detox
       run: |
