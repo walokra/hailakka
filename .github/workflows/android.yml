@@ -52,9 +52,9 @@ jobs:
     - name: Android Detox
       run: npm start & npm run e2e:android:run
 
-    - name: Store Detox artifacts on test failure
+    - name: Archive Detox artifacts (on test failure)
       uses: actions/upload-artifact@v3
-      if: failure()
+      #if: failure()
       with:
         name: detox-artifacts
         path: artifacts # Default path for Detox artifacts

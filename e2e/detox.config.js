@@ -30,7 +30,7 @@ module.exports = {
       enabled: true,
       log: { enabled: true },
       screenshot: {
-        keepOnlyFailedTestsArtifacts: true,
+        keepOnlyFailedTestsArtifacts: false,
         shouldTakeAutomaticSnapshots: true,
         takeWhen: {
           testDone: true,

@@ -1,3 +1,5 @@
+[![e2e: iOS](https://github.com/walokra/hailakka/actions/workflows/ios.yml/badge.svg)](https://github.com/walokra/hailakka/actions/workflows/ios.yml) [![e2e: Android](https://github.com/walokra/hailakka/actions/workflows/android.yml/badge.svg)](https://github.com/walokra/hailakka/actions/workflows/android.yml)
+
 # Hailakka
 
 News reader client for High.fi done with (Expo)[https://expo.io/].
