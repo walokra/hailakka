@@ -26,9 +26,11 @@
     "e2e:ios:refresh": "npm run e2e:ios:build && npm run e2e:ios:run -- --updateSnapshot",
     "e2e:ios:run": "detox test --configuration ios.development",
     "e2e:android": "npm run e2e:android:build && npm run e2e:android:run",
-    "e2e:android:build": "export FORCE_BUNDLING=true && detox build --configuration android.release",
+    "e2e:android:build": "export FORCE_BUNDLING=true && detox build --configuration android.development",
+		"e2e:android:ci:build": "export FORCE_BUNDLING=true && detox build --configuration android.ci",
+		"e2e:android:ci:run": "detox test --configuration android.ci",
     "e2e:android:refresh": "npm run e2e:android:build && npm run e2e:android:run -- --updateSnapshot",
-    "e2e:android:run": "detox test --configuration android.release"
+    "e2e:android:run": "detox test --configuration android.development"
   },
   "detox": {
     "extends": "./e2e/detox.config"

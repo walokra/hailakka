@@ -1,14 +1,14 @@
 module.exports = {
   apps: {
-    'android.debug': {
-      binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
-      build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
+    'android.ci.release': {
+      binaryPath: './android/app/build/outputs/apk/release/app-release.apk',
+      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..',
       testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
-    'android.release': {
-      binaryPath: './android/app/build/outputs/apk/release/app-release.apk',
-      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..',
+    'android.debug': {
+      binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
+      build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
       testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
@@ -47,12 +47,12 @@ module.exports = {
     },
   },
   configurations: {
-    'android.debug': {
-      app: 'android.debug',
+    'android.ci': {
+      app: 'android.ci.release',
       device: 'emulator',
     },
-    'android.release': {
-      app: 'android.release',
+    'android.debug': {
+      app: 'android.debug',
       device: 'emulator',
     },
     'ios.ci': {
