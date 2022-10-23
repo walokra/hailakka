@@ -15,3 +15,6 @@ npm-debug.*
 
 # Local Netlify folder
 .netlify
+
+# Detox
+artifacts

@@ -27,14 +27,15 @@ module.exports = {
   },
   artifacts: {
     plugins: {
-      enabled: true,
-      log: { enabled: true },
+      log: { enabled: false },
       screenshot: {
-        keepOnlyFailedTestsArtifacts: false,
+        enabled: true,
+        keepOnlyFailedTestsArtifacts: true,
         shouldTakeAutomaticSnapshots: true,
         takeWhen: {
+          appNotReady: false,
           testDone: true,
-          testStart: false,
+          testStart: true,
         },
       },
       uiHierarchy: 'enabled',
