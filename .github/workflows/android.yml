@@ -61,7 +61,7 @@ jobs:
         $ANDROID_HOME/platform-tools/adb devices
         echo "Emulator started"
     - name: Android Detox
-      run: export ENV=CI & npm run e2e:android:ci:run
+      run: export ENV=CI && npm run e2e:android:ci:run
 
     - name: Archive Detox artifacts on test failure
       uses: actions/upload-artifact@v3
