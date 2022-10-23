@@ -36,10 +36,13 @@ jobs:
 
     - name: Change Android Emulator settings
       run: |
-        echo "vm.heapSize=576" >> /root/.android/avd/Pixel_5.avd/config.ini
-        echo "hw.ramSize=2048" >> /root/.android/avd/Pixel_5.avd/config.ini
-        echo "disk.dataPartition.size=4000m" >> /root/.android/avd/Pixel_5.avd/config.ini
-        grep "size" /root/.android/avd/Pixel_5.avd/config.ini
+        echo "vm.heapSize=576" >> $AVD_PATH/config.ini
+        echo "hw.ramSize=2048" >> $AVD_PATH/config.ini
+        echo "disk.dataPartition.size=4000m" >> $AVD_PATH/config.ini
+        grep "size" $AVD_PATH/config.ini
+      env:
+        AVD_NAME: Pixel_5.avd
+        AVD_PATH: /Users/runner/.android/avd/$AVD_NAME
 
     - name: Install node_modules
       run: |
