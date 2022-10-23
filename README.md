@@ -2,8 +2,8 @@
 
 # Hailakka
 
-News reader client for High.fi done with (Expo)[https://expo.io/].
-For native clients see: Highkara for iOS.
+News reader client for High.fi done with [Expo](https://expo.io/).
+For native clients see: [Highkara for iOS](https://apps.apple.com/fi/app/highkara-uutislukija/id1035170336).
 
 ## Development
 
