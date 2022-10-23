@@ -66,7 +66,7 @@ module.exports = {
   devices: {
     emulator: {
       device: {
-        avdName: 'Pixel_5_API_31',
+        avdName: 'Pixel_5',
       },
       type: 'android.emulator',
       // utilBinaryPaths: ['./cache/test-butler-app.apk'],
