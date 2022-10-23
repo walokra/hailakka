@@ -32,6 +32,14 @@ jobs:
         echo "no" | $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager create avd --force --name Pixel_5 --device "pixel_5" -k 'system-images;android-31;default;x86_64'
         $ANDROID_HOME/emulator/emulator -list-avds
         $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list device
+        $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager list avd
+
+    - name: Change Android Emulator settings
+      run: |
+        echo "vm.heapSize=576" >> /root/.android/avd/Pixel_5.avd/config.ini
+        echo "hw.ramSize=2048" >> /root/.android/avd/Pixel_5.avd/config.ini
+        echo "disk.dataPartition.size=4000m" >> /root/.android/avd/Pixel_5.avd/config.ini
+        grep "size" /root/.android/avd/Pixel_5.avd/config.ini
 
     - name: Install node_modules
       run: |
@@ -50,11 +58,11 @@ jobs:
         $ANDROID_HOME/platform-tools/adb devices
         echo "Emulator started"
     - name: Android Detox
-      run: npm start & npm run e2e:android:run
+      run: export ENV=CI && npm start & npm run e2e:android:run
 
-    - name: Archive Detox artifacts (on test failure)
+    - name: Archive Detox artifacts on test failure
       uses: actions/upload-artifact@v3
-      #if: failure()
+      if: failure()
       with:
         name: detox-artifacts
         path: artifacts # Default path for Detox artifacts
