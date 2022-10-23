@@ -50,7 +50,7 @@ jobs:
 
     - name: Build for detox
       run: |
-        npm run e2e:android:build
+        npm run e2e:android:ci:build
     - name: Android Emulator
       timeout-minutes: 10
       continue-on-error: true
@@ -61,7 +61,7 @@ jobs:
         $ANDROID_HOME/platform-tools/adb devices
         echo "Emulator started"
     - name: Android Detox
-      run: export ENV=CI && npm start & npm run e2e:android:run
+      run: export ENV=CI && npm start & npm run e2e:android:ci:run
 
     - name: Archive Detox artifacts on test failure
       uses: actions/upload-artifact@v3

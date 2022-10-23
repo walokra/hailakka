@@ -6,7 +6,7 @@ module.exports = {
       testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
-    'android.debug': {
+    'android.development': {
       binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
       build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
       testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
@@ -51,8 +51,8 @@ module.exports = {
       app: 'android.ci.release',
       device: 'emulator',
     },
-    'android.debug': {
-      app: 'android.debug',
+    'android.development': {
+      app: 'android.development',
       device: 'emulator',
     },
     'ios.ci': {
