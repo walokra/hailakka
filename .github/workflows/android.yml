@@ -1,6 +1,6 @@
 name: Android
 
-on: [push]
+on: [workflow_dispatch]
 
 jobs:
   build:
@@ -10,6 +10,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -22,7 +24,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'zulu'
-        # architecture: 'x64'
+        architecture: 'x64'
+
     - name: Validate Gradle wrapper
       uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
 
@@ -51,6 +54,7 @@ jobs:
     - name: Build for detox
       run: |
         npm run e2e:android:ci:build
+
     # - name: Android Emulator
     #   timeout-minutes: 10
     #   continue-on-error: true
@@ -60,6 +64,7 @@ jobs:
     #     $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
     #     $ANDROID_HOME/platform-tools/adb devices
     #     echo "Emulator started"
+
     - name: Android Detox
       run: npm run e2e:android:ci:run
 
