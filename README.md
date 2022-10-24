@@ -41,6 +41,17 @@ Export Expo project configuration
 npx expo prebuild --platform ios
 ```
 
+Change Java version to 11
+
+```
+brew reinstall asdf
+asdf plugin add java
+asdf list-all java
+asdf install java zulu-11.60.19
+asdf global java zulu-11.60.19
+asdf local java zulu-11.60.19
+```
+
 Run tests
 
 ```
