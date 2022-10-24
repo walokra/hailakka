@@ -28,7 +28,7 @@
     "e2e:android": "npm run e2e:android:build && npm run e2e:android:run",
     "e2e:android:build": "detox build --configuration android.development",
     "e2e:android:ci:build": "export FORCE_BUNDLING=true && detox build --configuration android.ci",
-    "e2e:android:ci:run": "detox test --configuration android.ci --headless --cleanup",
+    "e2e:android:ci:run": "ENV=CI detox test --configuration android.ci --headless --cleanup",
     "e2e:android:refresh": "npm run e2e:android:build && npm run e2e:android:run -- --updateSnapshot",
     "e2e:android:run": "detox test --configuration android.development"
   },
