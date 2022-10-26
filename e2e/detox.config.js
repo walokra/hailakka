@@ -33,7 +33,7 @@ module.exports = {
         keepOnlyFailedTestsArtifacts: true,
         shouldTakeAutomaticSnapshots: true,
         takeWhen: {
-          appNotReady: false,
+          appNotReady: true,
           testDone: true,
           testStart: true,
         },
