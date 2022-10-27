@@ -48,7 +48,7 @@ module.exports = {
   },
   configurations: {
     'android.ci': {
-      app: 'android.ci.release',
+      app: 'android.development',
       device: 'emulator',
     },
     'android.development': {
