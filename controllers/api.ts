@@ -196,7 +196,7 @@ export const listCategories = async (
 
   const url = `${createApiEndpoint(
     domainToUse,
-    `/api/?act=listCategories&usedLanguage=${useToRetrieveLists}&APIKEY=${API_KEY}`,
+    `api/?act=listCategories&usedLanguage=${useToRetrieveLists}&APIKEY=${API_KEY}`,
   )}`;
   // console.debug("api.ts, listLanguages, url=" + url);
 

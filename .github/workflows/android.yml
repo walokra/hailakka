@@ -59,7 +59,7 @@ jobs:
       continue-on-error: true
       run: |
         echo "Starting emulator"
-        nohup $ANDROID_HOME/emulator/emulator -verbose -no-audio -no-snapshot -no-window @Pixel_5 &
+        nohup $ANDROID_HOME/emulator/emulator -verbose -no-audio -no-snapshot -no-window -gpu swiftshader_indirect @Pixel_5 &
         # nohup $ANDROID_HOME/emulator/emulator -verbose -no-audio -no-snapshot -no-window -partition-size 2048 @Pixel_5 &
         $ANDROID_HOME/platform-tools/adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed | tr -d '\r') ]]; do sleep 1; done; input keyevent 82'
         $ANDROID_HOME/platform-tools/adb devices
@@ -70,7 +70,7 @@ jobs:
         npm run e2e:android:ci:build
 
     - name: Android Detox
-      run: npm run e2e:android:ci:run
+      run: npm run e2e:android:ci:run --  --loglevel verbose
 
     - name: Archive Detox artifacts on test failure
       uses: actions/upload-artifact@v3
