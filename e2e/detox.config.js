@@ -1,37 +1,38 @@
 module.exports = {
   apps: {
-    'android.debug': {
+    'android.development': {
       binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
       build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
       testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
       type: 'android.apk',
     },
-    'android.release': {
-      binaryPath: './android/app/build/outputs/apk/release/app-release.apk',
-      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..',
-      testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
-      type: 'android.apk',
+    'ios.ci.release': {
+      binaryPath: './ios/build/Build/Products/Release-iphonesimulator/hailakka.app',
+      build:
+        'set -o pipefail && xcodebuild -quiet -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Release -sdk iphonesimulator -derivedDataPath ios/build | xcbeautify --quieter',
+      type: 'ios.app',
     },
     'ios.development': {
       binaryPath: './ios/build/Build/Products/Debug-iphonesimulator/hailakka.app',
       build:
-        'xcodebuild -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
+        'xcodebuild -quiet -workspace ios/hailakka.xcworkspace -scheme hailakka -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build',
       type: 'ios.app',
     },
   },
   artifacts: {
     plugins: {
+      log: { enabled: false },
       screenshot: {
-        enabled: false,
-        keepOnlyFailedTestsArtifacts: false,
-        shouldTakeAutomaticSnapshots: false,
+        enabled: true,
+        keepOnlyFailedTestsArtifacts: true,
+        shouldTakeAutomaticSnapshots: true,
         takeWhen: {
-          appNotReady: false,
-          testDone: false,
-          testStart: false,
+          appNotReady: true,
+          testDone: true,
+          testStart: true,
         },
       },
-      uiHierarchy: 'disabled',
+      uiHierarchy: 'enabled',
     },
   },
   behavior: {
@@ -40,13 +41,13 @@ module.exports = {
     },
   },
   configurations: {
-    'android.debug': {
-      app: 'android.debug',
+    'android.development': {
+      app: 'android.development',
       device: 'emulator',
     },
-    'android.release': {
-      app: 'android.release',
-      device: 'emulator',
+    'ios.ci': {
+      app: 'ios.ci.release',
+      device: 'simulator',
     },
     'ios.development': {
       app: 'ios.development',
@@ -56,10 +57,12 @@ module.exports = {
   devices: {
     emulator: {
       device: {
-        avdName: 'Pixel_5_API_31',
+        avdName: 'Pixel_5',
       },
-      type: 'android.emulator',
       // utilBinaryPaths: ['./cache/test-butler-app.apk'],
+      headless: Boolean(process.env.CI),
+      readonly: true,
+      type: 'android.emulator',
     },
     simulator: {
       device: {
