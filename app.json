@@ -4,12 +4,9 @@
   "expo": {
     "name": "hailakka",
     "slug": "hailakka",
-    "version": "0.2.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
+    "version": "0.3.0",
+    "platforms": ["ios", "android", "web"],
+    "plugins": ["@config-plugins/detox"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "highlakka",
@@ -22,9 +19,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ruleoftech.hailakka",
