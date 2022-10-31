@@ -2,9 +2,9 @@ name: iOS
 
 on:
   push:
-      branches: [master]
+    branches: [master]
   pull_request:
-      branches: [master]
+    branches: [master]
 
 jobs:
   build:
@@ -15,38 +15,38 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_14.0.1.app
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 1
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
-    - name: Use Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16.x'
-        cache: 'npm'
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'npm'
 
-    - name: Rebuild detox
-      if: steps.cache.outputs.cache-hit == 'true'
-      run: npm run detox clean-framework-cache && npm run detox build-framework-cache
+      - name: Rebuild detox
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: npm run detox clean-framework-cache && npm run detox build-framework-cache
 
-    - name: Install Dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
-      run: npm install
+      - name: Install Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm install
 
-    - name: Cache Pods
-      uses: actions/cache@v1
-      id: podcache
-      with:
-        path: ios/Pods
-        key: pods-${{ hashFiles('**/Podfile.lock') }}
+      - name: Cache Pods
+        uses: actions/cache@v1
+        id: podcache
+        with:
+          path: ios/Pods
+          key: pods-${{ hashFiles('**/Podfile.lock') }}
 
-    - name: Update Pods
-      run: |
-        gem update cocoapods xcodeproj
-        cd ios && pod install && cd ..
-    - run: brew tap wix/brew
-    - run: brew install applesimutils
-    - run: brew install xcbeautify
-    - run: npm run e2e:ios:ci:build
-    - run: npm run e2e:ios:ci:run --cleanup
+      - name: Update Pods
+        run: |
+          gem update cocoapods xcodeproj
+          cd ios && pod install && cd ..
+      - run: brew tap wix/brew
+      - run: brew install applesimutils
+      - run: brew install xcbeautify
+      - run: npm run e2e:ios:ci:build
+      - run: npm run e2e:ios:ci:run --cleanup

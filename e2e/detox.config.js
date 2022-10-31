@@ -1,5 +1,11 @@
 module.exports = {
   apps: {
+    'android.ci.release': {
+      binaryPath: './android/app/build/outputs/apk/release/app-release.apk',
+      build: 'cd android && ./gradlew assembleRelease assembleAndroidTest -DtestBuildType=debug && cd ..',
+      testBinaryPath: './android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk',
+      type: 'android.apk',
+    },
     'android.development': {
       binaryPath: './android/app/build/outputs/apk/debug/app-debug.apk',
       build: 'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..',
@@ -41,6 +47,10 @@ module.exports = {
     },
   },
   configurations: {
+    'android.ci': {
+      app: 'android.ci.release',
+      device: 'emulator',
+    },
     'android.development': {
       app: 'android.development',
       device: 'emulator',
