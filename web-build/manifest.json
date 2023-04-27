@@ -11,6 +11,11 @@
     {
       "platform": "itunes",
       "id": "com.ruleoftech.hailakka"
+    },
+    {
+      "platform": "play",
+      "url": "http://play.google.com/store/apps/details?id=com.ruleoftech.hailakka",
+      "id": "com.ruleoftech.hailakka"
     }
   ],
   "prefer_related_applications": true,
