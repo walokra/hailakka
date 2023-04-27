@@ -21,6 +21,11 @@ On a simulator or emulator:
 - Pressing a will open in an Android emulator or connected device.
 - Pressing w will open in your browser. Expo supports all major browsers.
 
+### Dockerized
+
+docker build . -t hailakka
+docker run -p 8080:80 hailakka
+
 ## Deployment
 
 Create build

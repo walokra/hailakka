@@ -1,0 +1,9 @@
+Dockerfile
+.dockerignore
+node_modules
+README.md
+
+.github
+android
+e2e
+ios
