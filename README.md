@@ -26,6 +26,12 @@ On a simulator or emulator:
 docker build . -t hailakka
 docker run -p 8080:80 hailakka
 
+#### Dockerized app deployed
+
+The PWA is deployed automatically by GitHub Actions to Render.com although Render can do automatic deploy on every push to the repository.
+
+- <https://hailakka.onrender.com/>
+
 ## Deployment
 
 Create build
