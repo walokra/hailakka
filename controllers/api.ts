@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
- 
+
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // import { Platform } from 'react-native';
 
