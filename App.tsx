@@ -33,6 +33,7 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import WebViewScreen from './screens/WebViewScreen';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomDrawerContent = (props: any) => (
   <DrawerContentScrollView {...props}>
     <Header {...props} />
@@ -55,6 +56,7 @@ const Stack = createStackNavigator();
     </TouchableOpacity>
   </View> */
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DrawerIcon = (navigation: any) => (
   <Ionicons
     color="blue"
@@ -91,6 +93,7 @@ const Root = (props: any): JSX.Element => {
         <Stack.Screen
           component={WebViewScreen}
           name="WebView"
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           options={({ route }) => ({ title: (route.params as any).title })}
         />
       </Stack.Navigator>

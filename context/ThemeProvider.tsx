@@ -8,7 +8,7 @@ export interface Theme {
 type ThemeContextState = { colorScheme: string };
 
 const themeContextDefaultValue = {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setState: (state: ThemeContextState) => {},
   state: { colorScheme: 'dark' },
 };

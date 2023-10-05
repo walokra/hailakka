@@ -37,7 +37,7 @@ The PWA is deployed automatically by GitHub Actions to Render.com although Rende
 Create build
 
 ```
-expo build:web
+npx expo export:web
 ```
 
 ### Netlify

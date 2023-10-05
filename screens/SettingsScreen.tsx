@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable react/function-component-definition */
 import { Ionicons } from '@expo/vector-icons';
@@ -39,7 +39,7 @@ export default function SettingsScreen() {
         <Text style={[styles.titleStyle, { color: colors.text }]}>General</Text>
         <SettingsSwitch
           containerStyle={{ backgroundColor: colors.card }}
-          onValueChange={(value: any) => {
+          onValueChange={(value: boolean) => {
             console.log('use mobile mode:', value);
             setIsMobileModeEnabled(value);
           }}

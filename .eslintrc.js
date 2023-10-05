@@ -106,7 +106,7 @@ module.exports = {
 
     // sort union/intersection type members since we like to sort
     // https://github.com/typescript-eslint/typescript-eslint/blob/main/packages/eslint-plugin/docs/rules/sort-type-union-intersection-members.md
-    '@typescript-eslint/sort-type-union-intersection-members': 'error',
+    '@typescript-eslint/sort-type-constituents': 'error',
 
     // revert airbnb rule that was disabled by eslint-config-prettier
     // https://eslint.org/docs/rules/arrow-body-style

@@ -47,6 +47,7 @@ const SettingsSwitch: React.FC<{
   descriptionStyle?: object;
   disabled?: boolean;
   // disabledOverlayStyle?: object;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValueChange?: any;
   // switchProps?: object;
   // switchWrapperProps?: object;
