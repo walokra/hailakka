@@ -81,7 +81,16 @@ module.exports = {
       type: 'ios.simulator',
     },
   },
+  jest: {
+    reportSpecs: false,
+    reportWorkerAssign: false,
+    setupTimeout: 120000,
+  },
   runnerConfig: './e2e/config.json',
-  skipLegacyWorkersInjection: true,
-  testRunner: 'jest',
+  testRunner: {
+    $0: 'jest',
+    args: {
+      config: 'e2e/config.json',
+    },
+  },
 };
