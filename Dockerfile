@@ -10,13 +10,13 @@ RUN npm install
 COPY . .
 ENV NODE_ENV=production
 
-RUN npx expo export:web
+RUN npx expo export -p web
 
 # Serve the web build with nginx
 FROM nginx:1-alpine
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/web-build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # For running as non-root user
 RUN chown -R nginx:nginx /var/cache/nginx && \

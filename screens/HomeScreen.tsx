@@ -194,7 +194,7 @@ const Homescreen = ({ navigation }) => {
         }
       })
       .catch((e) => {
-        // eslint-disable-next-line no-console
+         
         console.error(e);
         setLoading(false);
         setError(true);

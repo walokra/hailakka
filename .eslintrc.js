@@ -39,6 +39,7 @@ module.exports = {
     'typescript-sort-keys',
   ],
   rules: {
+    'no-console': 'off',
     // warn instead of error @ts-ignore etc
     // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/docs/rules/ban-ts-comment.md
     '@typescript-eslint/ban-ts-comment': 'warn',

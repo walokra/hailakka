@@ -4,24 +4,24 @@
   "expo": {
     "name": "hailakka",
     "slug": "hailakka",
-    "version": "0.49.0",
-    "platforms": ["ios", "android", "web"],
-    "plugins": [
-      "@config-plugins/detox"
+    "version": "0.50.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
     ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "highlakka",
+    "scheme": "hailakka",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "userInterfaceStyle": "automatic",
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ruleoftech.hailakka",
@@ -35,7 +35,9 @@
       "package": "com.ruleoftech.hailakka"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single"
     }
   }
 }

@@ -8,7 +8,7 @@ For native clients see: [Highkara for iOS](https://apps.apple.com/fi/app/highkar
 ## Development
 
 1. `npm i`
-1. Start development server: `expo start`
+1. Start development server: `npx expo start`
 
 ## Running
 
@@ -37,12 +37,12 @@ The PWA is deployed automatically by GitHub Actions to Render.com although Rende
 Create build
 
 ```
-npx expo export:web
+npx expo export -p web
 ```
 
 ### Netlify
 
-TDB
+See: https://docs.expo.dev/distribution/publishing-websites/
 
 ## Detox e2e tests
 

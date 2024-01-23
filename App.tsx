@@ -22,6 +22,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Header from './components/Header';
 import { CategoryContext } from './context/CategoryContext';
@@ -178,30 +179,32 @@ const App = () => {
         <View style={[styles.container]} testID="navigation-container-view">
           <StatusBar style={themeStatusBarStyle} />
 
-          <Drawer.Navigator
-            drawerContent={CustomDrawerContent}
-            // drawerStyle={isLargeScreen ? null : { width: '100%' }}
-            // drawerType={isLargeScreen ? 'permanent' : 'back'}
-            initialRouteName="Root"
-            // overlayColor="transparent"
-            screenOptions={({ navigation }) => ({
-              // eslint-disable-next-line react/no-unstable-nested-components
-              headerLeft: () => <DrawerIcon navigation={navigation} />,
-            })}
-          >
-            {categories && categories.length > 0 ? (
-              categories.map((item: Category) => (
-                <Drawer.Screen
-                  children={() => <Root item={item} />}
-                  key={item.sectionID}
-                  name={`${item.title}_${item.sectionID}`}
-                  options={{ drawerLabel: item.title, headerTitle: item.title }}
-                />
-              ))
-            ) : (
-              <Drawer.Screen component={EmptyScreen} name="empty" />
-            )}
-          </Drawer.Navigator>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Drawer.Navigator
+              drawerContent={CustomDrawerContent}
+              // drawerStyle={isLargeScreen ? null : { width: '100%' }}
+              // drawerType={isLargeScreen ? 'permanent' : 'back'}
+              initialRouteName="Root"
+              // overlayColor="transparent"
+              screenOptions={({ navigation }) => ({
+                // eslint-disable-next-line react/no-unstable-nested-components
+                headerLeft: () => <DrawerIcon navigation={navigation} />,
+              })}
+            >
+              {categories && categories.length > 0 ? (
+                categories.map((item: Category) => (
+                  <Drawer.Screen
+                    children={() => <Root item={item} />}
+                    key={item.sectionID}
+                    name={`${item.title}_${item.sectionID}`}
+                    options={{ drawerLabel: item.title, headerTitle: item.title }}
+                  />
+                ))
+              ) : (
+                <Drawer.Screen component={EmptyScreen} name="empty" />
+              )}
+            </Drawer.Navigator>
+          </GestureHandlerRootView>
         </View>
       </NavigationContainer>
     </SafeAreaProvider>
